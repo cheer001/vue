@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div id="app">
+      数学：<input type="text" v-model="mathScore" /><br />
+      英语：<input type="text" v-model="englishScore" /><br />
+      <!-- v-model调用函数时，不要少了小括号 -->
+      总得分(函数-单向绑定)：<input type="text" v-model="sumScore()" /><br />
+      <!-- 计算属性后面不加上小括号 -->
+      总得分(计算属性-单向绑定)：<input type="text" v-model="sumScore1" /><br />
+      总得分(计算属性-双向绑定)：<input type="text" v-model="sumScore2" />
+
+      <!-- 通过 watch 选项 监听数学分数，  当数学更新后回调函数中重新计算总分sunScire3 -->
+      总得分(监听器)：<input type="text" v-model="sumScore3" />
+    </div>
+    <script src="./node_modules/vue/dist/vue.js"></script>
+    <script>
+      /*
+        1.函数没有缓存，每次都会调用。
+        2.计算属性有缓存，只有当计算属性体内的值被更改之后才会被调用，不然不会被调用
+        3.函数只支持单向
+        4.机选属性默认下：只有getter函数，没有setter函数
+            如果你要进行双向，则需要自定义setter函数
+        */
+      var vm = new Vue({
+        el: "#app",
+        data: {
+          mathScore: 80,
+          englishScore: 90,
+          sumScore3: 0, //通过监听器计算出来的总得分
+        },
+        methods: {
+          sumScore: function () {
+            console.log("sumScore被调用");
+            // this指向的就是 vm实例,减0是为了字符串转换为数值运算
+            return this.mathScore - 0 + (this.englishScore - 0);
+          },
+        },
+        //定义计算属性选项
+        computed: {
+          //这个是单向绑定，默认只有getter方法
+          //计算属性有缓存，如果计算属性体内的值没有发生改变，这不会重新计算，只有发生改变的时候才会重新计算
+          sumScore1: function () {
+            console.log("sumScore1被调用");
+            // this指向的就是 vm实例,减0是为了字符串转换为数值运算
+            return this.mathScore - 0 + (this.englishScore - 0);
+          },
+          sumScore2: {
+            //获取数据
+            get: function () {
+              console.log("sumScore2.get被调用");
+              return this.mathScore - 0 + (this.englishScore - 0);
+            },
+            //设置数据，当计算属性更新之后才厚调用set方法
+            //newValue是sunScore2更新之后的新值
+            set: function (newValue) {
+              console.log("sumScore2.set被调用");
+              var avgScore = newValue / 2;
+              this.mathScore = avgScore;
+              this.englishScore = avgScore;
+            },
+          },
+        },
+        //监听器：
+        watch: {
+          //需求：通过 watch 选项 监听数学分数，  当数学更新后回调函数中重新计算总分sunScire3
+          //newValue 是更新后的值，oldValue 是更新前的值
+          mathScore: function (newValue, oldVaue) {
+            console.log("watch监听器,监听到了数学分数的更新");
+            this.sumScore3 = newValue - 0 + (this.englishScore - 0);
+          },
+        },
+      });
+
+      //监听器方式2：通过 vm 实例进行调用
+      //第1个参数是被监听的属性名，第2个是回调函数
+      vm.$watch("englishScore", function (newValue) {
+        //newValue就是更新之后的英语分数
+        this.sumScore3 = newValue - 0 + (this.mathScore - 0);
+      });
+      vm.$watch("sumScore3", function (newValue) {
+        //newValue就是更新之后总分
+        var avgScore = newValue / 2;
+        this.mathScore = avgScore;
+        this.englishScore = avgScore;
+      });
+    </script>
+  </body>
+</html>
