@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div id="app">
+      <p v-upper-text="message">xxxxx</p>
+      自动获取焦点:<input type="text" v-focus />
+    </div>
+    <script src="./node_modules/vue/dist/vue.js"></script>
+    <script>
+      //注册全局的自定义指令(可在所有Vue实例管理入口下引用这个指令)
+      /*第一个参数为指令名，但是不要有v-开头*/
+      Vue.directive("upper-text", {
+        //一般对样式的操作在bind中，bind函数只调用一次
+        bind: function (el) {
+          el.style.color = "red";
+        },
+        //一般对js操作在inserted中，也是只调用一次
+        //el是当前指令作用的那个Dom元素
+        //binding用于获取使用了当前指令的绑定值(value)、表达式(expression)、指令名(name)等
+        inserted: function (el, binding) {
+          //将所有字母内容转换为大写
+          el.innerHTML = binding.value.toUpperCase();
+        },
+      });
+      new Vue({
+        el: "#app",
+        data: {
+          message: "gerry,陪你学习伴你成长",
+        },
+        //注册局部的自定义指令(只能在当前Vue实例管理的入口下引用这个指令)
+        directives: {
+          focus: {
+            inserted: function (el, binding) {
+              //被v-focus指定的那个元素就会获取焦点
+              el.focus();
+            },
+          },
+        },
+      });
+    </script>
+  </body>
+</html>
