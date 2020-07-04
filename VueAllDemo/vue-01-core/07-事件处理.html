@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div id="app">
+        <h3>1、事件处理方法 v-on 或 @</h3>
+        <button v-on:click="say">Say{{msg}}</button>
+        <!-- $event代表的是原生的Dom事件 -->
+        <button @click="warn('hello',$event)">Warn</button>
+    </div>
+    <script src="./node_modules/vue/dist/vue.js"></script>
+    <script>
+       var vm =  new Vue({
+            el:"#app",
+            data:{
+                msg:"Hello Gerry"
+            },
+            methods:{//定义事件处理函数
+                //event代表的是Dom原生事件，Vue.js它会自动的将它传入进来
+                say:function(event){
+                    alert(this.msg);
+                    alert(event.target.innerHTML);
+                },
+                //如果函数有多个参数，而又需要使用原生事件，则需要使用 $event 作为 参数传入
+                warn:function(name,event){
+                    alert(name+","+event.target.tagName);
+                }
+            }
+        });
+    </script>
+</html>
