@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      /*将带有v-cloak属性的标签隐藏：
+        原理：有v-clock属性的标签，它会先把他隐藏起来，等到vue解析到这里的时候再显示，
+             从而避免了{{}}的闪烁问题*/
+      [v-cloak] {
+        display: none;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="app" v-cloak>
+      <!-- v-pre 
+            1.用于显示双大括号
+            2.跳过这个元素和他的子元素的编译过程，这样可以提高编译性能
+     -->
+      <span v-pre>{{你好，gerry}}</span>
+      <!-- 使用双大括号，会有双大括号{{}}闪烁出来
+            可以通过v-text进行解决闪烁问题    
+        -->
+      <h3>{{message}}</h3>
+      <h3>{{message}}</h3>
+      <h3>{{message}}</h3>
+      <h3 v-text="message"></h3>
+      <h3 v-text="message"></h3>
+      <h3 v-text="message"></h3>
+    </div>
+    <script src="./node_modules/vue/dist/vue.js"></script>
+    <script>
+      new Vue({
+        el: "#app",
+        data: {
+          message: "hello gerry...",
+        },
+      });
+    </script>
+  </body>
+</html>
