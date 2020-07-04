@@ -21,14 +21,25 @@
 
       <h3>3、指令输出真正的HTML 内容 v-html</h3>
       <p>双大括号：{{contentHtml}}</p>
+
       <!-- 
-            v-html：
-            1.如果输出的内容是HTML数据，双大括号将数据移普通的文本方式进行输出，
-            为了输出真正HTML的效果，就需要使用v-html指令
-            2.为了防止XSS攻击
-            
-         -->
+          v-html：
+          1.如果输出的内容是HTML数据，双大括号将数据移普通的文本方式进行输出，
+          为了输出真正HTML的效果，就需要使用v-html指令
+          2.为了防止XSS攻击
+          
+        -->
       <p>v-html:<span v-html="contentHtml"></span></p>
+      <h3>4、元素绑定指令 v-bind:，缩写形式:</h3>
+      <img v-bind:src="imgUrl" />
+      <img :src="imgUrl" />
+      <a :href="mxgUrl">点击跳转</a>
+      <h3>5、事件绑定指令</h3>
+      <input type="text" value="1" v-model="num" />
+      <!-- 指定事件处理函数：v-on -->
+      <button v-on:click="add">点击+1</button>
+      <!-- 缩写形式: @ -->
+      <button @click="add">点击+1</button>
     </div>
     <script src="./node_modules/vue/dist/vue.js"></script>
     <script>
@@ -40,6 +51,15 @@
           contentHtml: `<span style='color:red;'>此内容为红色
                         <script>alert('gerry');<\/script>
                         </span>`,
+          imgUrl: "https://cn.vuejs.org/images/logo.png",
+          mxgUrl: "http://mengxuegu.com",
+          num: 1,
+        },
+        methods: {
+          //定义了事件处理函数
+          add: function () {
+            this.num++;
+          },
         },
       });
     </script>
