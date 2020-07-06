@@ -13,8 +13,9 @@
 		<section class="todoapp" id="todoapp">
 			<header class="header">
 				<h1>todos</h1>
-				<!-- 添加任务 -->
+				<!-- 添加任务,keyup.enter 回车键监听 -->
 				<input
+					@keyup.enter="addItme"
 					class="new-todo"
 					placeholder="What needs to be done?"
 					autofocus
