@@ -22,6 +22,13 @@
 		data: {
 			items, //这是对象属性的简写方式，等价于items:items(key-value名称一样时使用)
 		},
+		computed: {
+			//过滤出所有未完成的任务项
+			remaining() {
+				//ES6 箭头函数
+				return this.items.filter((item) => !item.completed).length;
+			},
+		},
 		methods: {
 			addItme(event) {
 				//对象属性函数简写，等价于addItem:function(){};

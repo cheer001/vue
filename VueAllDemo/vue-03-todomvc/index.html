@@ -56,7 +56,11 @@
 				</section>
 				<footer class="footer">
 					<!-- This should be `0 items left` by default -->
-					<span class="todo-count"><strong>0</strong> item left</span>
+					<span class="todo-count">
+						<strong>{{remaining}}</strong>
+						<!-- 将显示的item单词多元化(根据任务数：为单数没有s，为负数加s) -->
+						item{{remaining === 1 ? "":"s"}} left
+					</span>
 					<!-- Remove this if you don't implement routing -->
 					<ul class="filters">
 						<li>
