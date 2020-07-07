@@ -47,10 +47,23 @@
 			},
 		},
 		methods: {
+			//移除所有未完成任务项
+			removeCompleted() {
+				// console.log("removeCompleted");
+				//过滤出所有未完成的任务，重新赋值数组即可
+				this.items = this.items.filter((item) => {
+					!item.completed;
+				});
+			},
+			//增加任务项
+			removeItem(index) {
+				//移除索引为 index 的一条记录
+				this.items.splice(index, 1);
+			},
 			//增加任务项
 			addItme(event) {
 				//对象属性函数简写，等价于addItem:function(){};
-				console.log("addItem", event.target.value);
+				// console.log("addItem", event.target.value);F
 				//1.获取文本框输入的数据
 				const content = event.target.value.trim();
 				//2.判断数据如果为空，则什么都不做
@@ -63,11 +76,6 @@
 				this.items.push({ id, content, completed: false });
 				//4.清空文本框内容
 				event.target.value = "";
-			},
-			//增加任务项
-			removeItem(index) {
-				//移除索引为 index 的一条记录
-				this.items.splice(index, 1);
 			},
 		},
 	});

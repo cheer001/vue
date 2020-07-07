@@ -53,7 +53,11 @@
 								<!-- 修改：1、{{content}} 显示内容 -->
 								<label>{{item.content}}</label>
 								<!-- 修改：1、:value 绑定id删除 -->
-								<button class="destroy" :value="item.id" @click="removeItem(index)"></button>
+								<button
+									class="destroy"
+									:value="item.id"
+									@click="removeItem(index)"
+								></button>
 							</div>
 							<input class="edit" value="Create a TodoMVC template" />
 						</li>
@@ -79,7 +83,13 @@
 						</li>
 					</ul>
 					<!-- Hidden if no completed items are left ↓ -->
-					<button class="clear-completed">Clear completed</button>
+					<button
+						class="clear-completed"
+						v-show="items.length>remaining"
+						@click="removeCompleted"
+					>
+						Clear completed
+					</button>
 				</footer>
 			</template>
 		</section>
