@@ -1,22 +1,20 @@
 //表示依赖了全局的Vue
 (function (Vue) {
-	const items = [
-		// {
-		// 	id: 1, //主键id
-		// 	content: "vue.js", //输入的内容
-		// 	complated: false, //是否完成
-		// },
-		// {
-		// 	id: 2, //主键id
-		// 	content: "java", //输入的内容
-		// 	complated: false, //是否完成
-		// },
-		// {
-		// 	id: 3, //主键id
-		// 	content: "python", //输入的内容
-		// 	complated: true, //是否完成
-		// },
-	];
+	var STORAGE_KEY = "items-vuejs";
+	//本地存储数据对象
+	const itemStorage = {
+		//获取本地数据
+		fetch: function () {
+			return JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
+		},
+		//保存数据到本地
+		save: function (items) {
+			// console.log("items", items);
+			localStorage.setItem(STORAGE_KEY, JSON.stringify(items));
+		},
+	};
+	//初始化任务
+	const items = [];
 	//自定义全局指令，用于 增加输入框
 	//定义时不要在前面加v-，引用指令是要加上v-
 	Vue.directive("app-focus", {
@@ -28,9 +26,20 @@
 	var app = new Vue({
 		el: "#todoapp",
 		data: {
-			items, //这是对象属性的简写方式，等价于items:items(key-value名称一样时使用)
+			items: itemStorage.fetch(), //这是对象属性的简写方式，等价于items:items(key-value名称一样时使用)
 			currentItem: null, //接受当前点击的任务项
 			filterStatus: "all", //接受变化的状态值
+		},
+		watch: {
+			//如果 items 发生改变，这个函数就会执行
+			items: {
+				deep: true, //发现对象内部值的变化，要在选项参数中指定deep:true.
+				handler: function (newItems, oldItems) {
+					//本地进行存储
+					// console.log("items--handler");
+					itemStorage.save(newItems);
+				},
+			},
 		},
 		//自定义局部指令，用于编辑输入框
 		directives: {
@@ -50,12 +59,12 @@
 				switch (this.filterStatus) {
 					//过滤出未完成的数据
 					case "active":
-						console.log("active");
+						// console.log("active");
 						return this.items.filter((item) => !item.completed);
 						break;
 					//过滤出已完成的数据
 					case "completed":
-						console.log("completed");
+						// console.log("completed");
 						return this.items.filter((item) => item.completed);
 						break;
 					//其他返回所有数据
@@ -110,13 +119,11 @@
 			},
 			//移除所有未完成任务项
 			removeCompleted() {
-				// console.log("removeCompleted");
 				//过滤出所有未完成的任务，重新赋值数组即可
-				this.items = this.items.filter((item) => {
-					!item.completed;
-				});
+				this.items = this.items.filter((item) => !item.completed);
+				// console.log("removeCompleted", items);
 			},
-			//增加任务项
+			//移除任务项
 			removeItem(index) {
 				//移除索引为 index 的一条记录
 				this.items.splice(index, 1);
@@ -142,10 +149,10 @@
 	});
 	//当hash值改变后会自动调用此函数
 	window.onhashchange = function () {
-		console.log("hash改变了", window.location.hash);
+		// console.log("hash改变了", window.location.hash);
 		//获取点击的路由 hash ,当截取的 hash 不为空 返回截取的，为空时返回 “all”
 		const hash = window.location.hash.substr(2) || "all";
-		console.log("hash", hash);
+		// console.log("hash", hash);
 		//2.状态一旦改变，将 hash 赋值给 filterStatus
 		// 当计算属性 filterItems 感知到 filterStatus 变化后，就会重新过滤
 		// 当filterItems 重新过滤出目标数据后，则自动同步更新到视图中
