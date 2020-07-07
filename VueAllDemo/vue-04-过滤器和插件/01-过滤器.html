@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div id="app">
+      <h3>过滤器接受单个参数：</h3>
+      <p>{{content | contentFilter}}</p>
+      <h3>过滤器接受多个参数：</h3>
+      <p>{{vueScore | add(javaScript, pythonScore)}}</p>
+    </div>
+    <script src="./node_modules/vue/dist/vue.js"></script>
+    <script>
+      var vm = new Vue({
+        el: "#app",
+        data: {
+          content: "小伙子，你TMD就是个SB",
+          vueScore: 80,
+          javaScript: 95,
+          pythonScore: 90,
+        },
+        //局部过滤器
+        filters: {
+          //value是调用时 | 左边的那个属性
+          contentFilter(value) {
+            if (!value) return "";
+            return value
+              .toUpperCase()
+              .replace("TMD", "***")
+              .replace("SB", "***");
+          },
+          //num1是调用时 | 左边的那个属性
+          add(num1, num2, num3) {
+            return num1 + num2 + num3;
+          },
+        },
+      });
+    </script>
+  </body>
+</html>
