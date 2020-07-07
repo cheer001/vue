@@ -18,7 +18,7 @@
 					@keyup.enter="addItme"
 					class="new-todo"
 					placeholder="What needs to be done?"
-					autofocus
+					v-app-focus
 				/>
 			</header>
 			<!-- items.length 值为 0 就是false -->
@@ -41,7 +41,7 @@
 						<li
 							v-for="(item,index) in items"
 							::key="item.id"
-							:class="{completed:item.completed}"
+							:class="{completed:item.completed,editing:item===currentItem}"
 						>
 							<div class="view">
 								<!-- 修改：1、v-model 绑定状态时候选中 -->
@@ -51,7 +51,7 @@
 									v-model="item.completed"
 								/>
 								<!-- 修改：1、{{content}} 显示内容 -->
-								<label>{{item.content}}</label>
+								<label @dblclick="toEdit(item)">{{item.content}}</label>
 								<!-- 修改：1、:value 绑定id删除 -->
 								<button
 									class="destroy"
@@ -59,7 +59,15 @@
 									@click="removeItem(index)"
 								></button>
 							</div>
-							<input class="edit" value="Create a TodoMVC template" />
+							<!-- 编辑任务 -->
+							<input
+								class="edit"
+								:value="item.content"
+								@keyup.esc="cancelEdit"
+								@keyup.enter="finishEdit(item,index,$event)"
+								@blur="finishEdit(item,index,$event)"
+								v-todo-focus="item===currentItem"
+							/>
 						</li>
 					</ul>
 				</section>

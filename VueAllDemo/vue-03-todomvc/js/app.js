@@ -17,10 +17,30 @@
 		// 	complated: true, //是否完成
 		// },
 	];
+	//自定义全局指令，用于 增加输入框
+	//定义时不要在前面加v-，引用指令是要加上v-
+	Vue.directive("app-focus", {
+		//聚集元素
+		inserted(el, binding) {
+			el.focus();
+		},
+	});
 	new Vue({
 		el: "#todoapp",
 		data: {
 			items, //这是对象属性的简写方式，等价于items:items(key-value名称一样时使用)
+			currentItem: null, //接受当前点击的任务项
+		},
+		//自定义局部指令，用于编辑输入框
+		directives: {
+			"todo-focus": {
+				//每当指令的值更新后，会调动此函数
+				update(el, binding) {
+					if (binding.value) {
+						el.focus();
+					}
+				},
+			},
 		},
 		computed: {
 			//过滤出所有未完成的任务项
@@ -47,6 +67,27 @@
 			},
 		},
 		methods: {
+			finishEdit(item, index, event) {
+				const content = event.target.value.trim();
+				//1.如果数据为空，则进行删除任务项
+				if (!content) {
+					this.removeItem(index);
+					return;
+				}
+				//2.添加数据到任务项中
+				item.content = content;
+				//3.移除 .editing样式
+				this.currentItem = null;
+			},
+			//取消编辑
+			cancelEdit() {
+				//移除样式
+				this.currentItem = null;
+			},
+			//进入编辑状态，当前点击的任务项item赋值currentItem,用于页面判断显示
+			toEdit(item) {
+				this.currentItem = item;
+			},
 			//移除所有未完成任务项
 			removeCompleted() {
 				// console.log("removeCompleted");
