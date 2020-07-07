@@ -47,6 +47,7 @@
 			},
 		},
 		methods: {
+			//增加任务项
 			addItme(event) {
 				//对象属性函数简写，等价于addItem:function(){};
 				console.log("addItem", event.target.value);
@@ -62,6 +63,11 @@
 				this.items.push({ id, content, completed: false });
 				//4.清空文本框内容
 				event.target.value = "";
+			},
+			//增加任务项
+			removeItem(index) {
+				//移除索引为 index 的一条记录
+				this.items.splice(index, 1);
 			},
 		},
 	});

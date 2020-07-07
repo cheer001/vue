@@ -53,7 +53,7 @@
 								<!-- 修改：1、{{content}} 显示内容 -->
 								<label>{{item.content}}</label>
 								<!-- 修改：1、:value 绑定id删除 -->
-								<button class="destroy" :value="item.id"></button>
+								<button class="destroy" :value="item.id" @click="removeItem(index)"></button>
 							</div>
 							<input class="edit" value="Create a TodoMVC template" />
 						</li>
