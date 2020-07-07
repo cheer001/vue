@@ -25,11 +25,12 @@
 			el.focus();
 		},
 	});
-	new Vue({
+	var app = new Vue({
 		el: "#todoapp",
 		data: {
 			items, //这是对象属性的简写方式，等价于items:items(key-value名称一样时使用)
 			currentItem: null, //接受当前点击的任务项
+			filterStatus: "all", //接受变化的状态值
 		},
 		//自定义局部指令，用于编辑输入框
 		directives: {
@@ -43,6 +44,25 @@
 			},
 		},
 		computed: {
+			//过滤出不同状态数据
+			filterItems() {
+				//this.filterStatus作为条件，变化后过滤不同数据
+				switch (this.filterStatus) {
+					//过滤出未完成的数据
+					case "active":
+						console.log("active");
+						return this.items.filter((item) => !item.completed);
+						break;
+					//过滤出已完成的数据
+					case "completed":
+						console.log("completed");
+						return this.items.filter((item) => item.completed);
+						break;
+					//其他返回所有数据
+					default:
+						return this.items;
+				}
+			},
 			//过滤出所有未完成的任务项
 			remaining() {
 				//ES6 箭头函数
@@ -120,5 +140,17 @@
 			},
 		},
 	});
-	// Your starting point. Enjoy the ride!
+	//当hash值改变后会自动调用此函数
+	window.onhashchange = function () {
+		console.log("hash改变了", window.location.hash);
+		//获取点击的路由 hash ,当截取的 hash 不为空 返回截取的，为空时返回 “all”
+		const hash = window.location.hash.substr(2) || "all";
+		console.log("hash", hash);
+		//2.状态一旦改变，将 hash 赋值给 filterStatus
+		// 当计算属性 filterItems 感知到 filterStatus 变化后，就会重新过滤
+		// 当filterItems 重新过滤出目标数据后，则自动同步更新到视图中
+		app.filterStatus = hash;
+	};
+	//第一次访问页面时，调用一次让状态生效
+	window.onhashchange();
 })(Vue);
