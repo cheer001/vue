@@ -28,6 +28,23 @@
 				//ES6 箭头函数
 				return this.items.filter((item) => !item.completed).length;
 			},
+			toggleAll: {
+				get() {
+					// console.log("toggleAll--get:", this.remaining);
+					//2.当 this.remaining 发生变化后，会触发该方法运行
+					//当所有未完成任务为 0 ，表示全部完成，这返回 true 让复选框选中
+					//反之 false 不选中
+					return this.remaining === 0;
+				},
+				set(newStatus) {
+					// console.log("toggleAll--set:", newStatus);
+					//1.当点击 checkbox 复选框后状态变化后，就会触发该方法运行，
+					//迭代出数组的每个元素，把当前状态值赋给每个元素的 completed
+					this.items.filter((item) => {
+						item.completed = newStatus;
+					});
+				},
+			},
 		},
 		methods: {
 			addItme(event) {
