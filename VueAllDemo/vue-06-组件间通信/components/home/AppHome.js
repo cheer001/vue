@@ -5,15 +5,10 @@
                         <dashboard :hobbies="hobbies"></dashboard>
                         <!--右边下半区域-->
                         <h2 class="sub-header">Section title</h2>
-                        <home-list :emp-list="empList"></home-list>
+                        <home-list :emp-list="empList" :deleteEmp="deleteEmp"></home-list>
                     </div>`;
   window.AppHome = {
     template,
-    components: {
-      //Dashboard 作为 AppHome 的子组件
-      Dashboard,
-      HomeList,
-    },
     data() {
       return {
         hobbies: ["健身", "学英语", "拳击", "学编程"],
@@ -24,6 +19,19 @@
           { id: 4, name: "gerry4", salary: 4000 },
         ],
       };
+    },
+    methods: {
+      //删除指定下标的数据
+      //因为删除emp会对empList做更新操作
+      //而empList是初始化在当前这个组件里，所以删除的函数要定义在这个组件里
+      deleteEmp(index) {
+        this.empList.splice(index, 1);
+      },
+    },
+    components: {
+      //Dashboard 作为 AppHome 的子组件
+      Dashboard,
+      HomeList,
     },
   };
 })();

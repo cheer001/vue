@@ -9,7 +9,13 @@
                             </tr>
                         </thead>
                         <tbody>
-                          <Item v-for="(emp,index) in empList" :key="emp.id" :emp="emp"/>
+                          <Item 
+                            v-for="(emp,index) in empList" 
+                            :key="emp.id" 
+                            :emp="emp" 
+                            :deleteEmp="deleteEmp" 
+                            :index="index"
+                          />
                         </tbody>
                         </table>
                     </div>`;
@@ -18,6 +24,7 @@
     //声明组件接受父组件传递的属性
     props: {
       empList: Array,
+      deleteEmp: Function, //逐层传递
     },
     template,
     components: {
