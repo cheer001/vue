@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>vue-resource</title>
+  </head>
+  <body>
+    <div id="app">
+      <h1>{{repDate}}</h1>
+    </div>
+    <script src="./node_modules/vue/dist/vue.js"></script>
+    <script src="./node_modules/vue-resource/dist/vue-resource.js"></script>
+    <script>
+      new Vue({
+        el: "#app",
+        data: {
+          repDate: [],
+        },
+        created() {
+          // GET /someUrl?foo=bar
+          this.$http
+            .get("http://127.0.0.1:5500/vue-07-lifecycle&ajax/db.json")
+            .then(
+              (response) => {
+                // 回调函数需要使用箭头函数(this为Vue实例)，不然this就代表window对象
+                console.log(response.data);
+                this.repDate = response.data;
+              },
+              (response) => {
+                // error callback
+                console.error("错误信息：", response.statusText, 404);
+              }
+            );
+        },
+      });
+    </script>
+  </body>
+</html>
