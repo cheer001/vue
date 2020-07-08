@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div id="app">
+      <h1>{{message}}</h1>
+    </div>
+    <script src="./node_modules/vue/dist/vue.js"></script>
+    <script>
+      var vm = new Vue({
+        // el: "#app",
+        data: {
+          message: "gerry",
+        },
+        beforeCreate() {
+          //Vue实例创建前被调用，数据和模板均未获取到
+          console.log("beforeCreate()", this.$el, this.$data); //beforeCreate() undefined undefined
+        },
+        created() {
+          //Vue实例创建后，最早可以获取到data数据的钩子，但是模板还未获取到
+          //建议在这里面发送ajax异步请求
+          console.log("created()", this.$el, this.$data); //created() undefined {__ob__: Observer}
+        },
+        beforeMount() {
+          //数据挂载之前，找到了模板，但是数据还未挂载到模板上
+          console.log("beforeMount()", this.$el, this.$data); //beforeMount() {{message}} {__ob__: Observer}
+        },
+        mounted() {
+          //数据已经挂载到模板中了
+          console.log("mounted()", this.$el, this.$data); //mounted() {{gerry}} {__ob__: Observer}
+        },
+        beforeUpdate() {
+          console.log("beforeUpdate()", this.$el.innerHTML, this.$data); //beforeUpdate() <h1>gerry</h1> {__ob__: Observer}
+        },
+        updated() {
+          console.log("updated()", this.$el.innerHTML, this.$data); //updated() <h1>小伙子</h1> {__ob__: Observer}
+        },
+        beforeDestroy() {
+          //销毁Vue实例之前调用
+          //收尾工作
+          console.log("beforeDestroy()"); //beforeDestroy()
+        },
+        destroyed() {
+          //销毁Vue实例之后调用
+          console.log("destroyed()"); //destroyed()
+        },
+      }).$mount("#app"); //如果实例中没有el选项，可使用$mount()手动挂载Dom
+
+      //   vm.$destroy(); //销毁实例  可在浏览器手动调用，来观察VUE插件中<Root>的销毁
+    </script>
+  </body>
+</html>
