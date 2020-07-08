@@ -13,7 +13,11 @@
                                   </app-home>
                                 -->
                                 <!-- 配置路由渲染组件出口-->
-                                <router-view></router-view>
+                                <keep-alive>
+                                  <router-view>
+                                    <h1 slot="dashboard" class="page-header">{{title}}</h1>
+                                  </router-view>
+                                </keep-alive>
                             </div>
                         </div>
                     </div>`;
