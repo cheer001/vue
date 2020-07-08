@@ -16,6 +16,12 @@
             //组件 Sport 会被渲染在 N热水组件中的 <router-view>组件中
             path: "/news/sport",
             component: Sport,
+            children: [
+              {
+                path: "/news/sport/detail/:id", //:id是路径变量，占位符
+                component: SportDetail,
+              },
+            ],
           },
           {
             //简写方式，等价于 /news/tech,前面不要有/,有/就是根目录了
