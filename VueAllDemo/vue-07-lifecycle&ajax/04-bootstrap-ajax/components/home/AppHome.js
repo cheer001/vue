@@ -19,13 +19,23 @@
     data() {
       return {
         hobbies: ["健身", "学英语", "拳击", "学编程"],
-        empList: [
-          { id: 1, name: "gerry1", salary: 1000 },
-          { id: 2, name: "gerry2", salary: 2000 },
-          { id: 3, name: "gerry3", salary: 3000 },
-          { id: 4, name: "gerry4", salary: 4000 },
-        ],
+        empList: [],
       };
+    },
+    created() {
+      axios
+        .get(
+          "http://127.0.0.1:5500/vue-07-lifecycle%26ajax/04-bootstrap-ajax/emp.json"
+        )
+        .then((response) => {
+          // handle success
+          console.log(response, this);
+          this.empList = response.data;
+        })
+        .catch((error) => {
+          // handle error
+          console.log(error.message);
+        });
     },
     methods: {
       //删除喜好
