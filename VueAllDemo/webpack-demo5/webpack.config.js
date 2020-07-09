@@ -15,12 +15,16 @@ module.exports = {
   module: {
     rules: [
       {
-        test: /.css$/,//正则表达式，匹配 .css文件资源
+        test: /.css$/, //正则表达式，匹配 .css文件资源
         use: [
           //根据外国人的习惯来的顺序
           "style-loader", //js识别css
           "css-loader", //css转换为js
         ],
+      },
+      {
+        test: /\.(png|svg|jpg|gif)$/,
+        use: ["file-loader"],
       },
     ],
   },
