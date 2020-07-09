@@ -12,4 +12,16 @@ module.exports = {
     path: path.join(__dirname, "./dist/"), //打包的结果文件生成的目录必须是绝对路径
     filename: "bundle.js",
   },
+  module: {
+    rules: [
+      {
+        test: /.css$/,//正则表达式，匹配 .css文件资源
+        use: [
+          //根据外国人的习惯来的顺序
+          "style-loader", //js识别css
+          "css-loader", //css转换为js
+        ],
+      },
+    ],
+  },
 };
