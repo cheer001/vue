@@ -12,4 +12,7 @@ Webpack的作用：
 	可集成模块热加载，当代码改变后自动刷新浏览器等等功能
 	
 	
-第二章学习总结()
+第二章学习总结()：
+npm i -g webpack@v4.35.2 npm i -g webpack-cli@3.3.6  :直接全部安装
+npm i -g webpack@v4.35.2 :安装webpack指定版本
+npm i -g webpack-cli@3.3.6  :安装webpack-cli才能使用命令行
