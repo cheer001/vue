@@ -27,6 +27,12 @@
             //简写方式，等价于 /news/tech,前面不要有/,有/就是根目录了
             path: "tech",
             component: Tech,
+            children: [
+              {
+                path: "/news/tech/detail/:id", //:id是路径变量，占位符
+                component: TechDetail,
+              },
+            ],
           },
           {
             //默认选择的路由： /news 后面没有子路径时,redirect 就是重定向到指定路径
