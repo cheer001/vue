@@ -40,3 +40,14 @@ VSCode 中安装插件 Node Snippets ,有代码快捷提示
 		"build": "webpack"  
 	  },
 	 通过使用：npm run 命令别名 执行对应命令(start命令别名的话前面不用加run)
+
+
+第三章学习总结(ECMAScript6模块规范)：
+导出模块export(等价于module.exports)
+导入模块import(等价于require)
+导出默认成员：
+	默认成员只能有一个，不然会报错
+导出非默认成员:
+	非默认成员必须要有成员名称
+	按需导入指定成员，采用结构赋值的方式
+	一次性导入模块文件中的所有成员(包含default)
