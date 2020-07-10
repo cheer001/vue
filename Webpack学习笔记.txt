@@ -61,7 +61,7 @@ Loder可以理解为是模块和资源的转换器，它本身是一个函数，
 这样我们就可以通过require或import来加载任何类型的模块文件，比如CSS、图片
 打包CSS资源(步骤)：
 	1.安装style-loader和css-loader依赖
-		npm install --save-dev style-loader css-loader1
+		npm install --save-dev style-loader css-loader
 		首先安装Loader插件：
 			css-loader是将css装载到javascript;
 			style-loader是让javascript认识css
@@ -79,7 +79,7 @@ Loder可以理解为是模块和资源的转换器，它本身是一个函数，
 		   }
 打包Images资源(步骤)：
 	1.安装file-loader依赖
-		install --save-dev file-loade
+		install --save-dev file-loader
 	2.修改webpack.config.js
 		module: { // 模块
 		       rules: [ // 规则
