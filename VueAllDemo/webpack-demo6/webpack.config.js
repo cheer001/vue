@@ -2,6 +2,8 @@
 const path = require("path");
 //引入插件
 const HtmlWebpackPlugin = require("html-webpack-plugin");
+//1.引入vue-loader插件
+const VueLoaderPlugin = require("vue-loader/lib/plugin");
 
 //导出一个webpack具有特殊属性配置的对象
 module.exports = {
@@ -26,6 +28,8 @@ module.exports = {
       //同时在 index.html 中会自动的使用script标签引入bundle.js
       template: "./index.html",
     }),
+    //3.请确保引入这个插件
+    new VueLoaderPlugin(),
   ],
   module: {
     rules: [
@@ -51,6 +55,11 @@ module.exports = {
             presets: ["@babel/preset-env"], //babel中内置的转换规则工具
           },
         },
+      },
+      //2.处理.vue单文件组件
+      {
+        test: /\.vue$/,
+        loader: "vue-loader",
       },
     ],
   },
