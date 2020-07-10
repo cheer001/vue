@@ -1,5 +1,7 @@
 //引入node中的path模块，处理文件路径 的小工具
 const path = require("path");
+//引入插件
+const HtmlWebpackPlugin = require("html-webpack-plugin");
 
 //导出一个webpack具有特殊属性配置的对象
 module.exports = {
@@ -12,6 +14,16 @@ module.exports = {
     path: path.join(__dirname, "./dist/"), //打包的结果文件生成的目录必须是绝对路径
     filename: "bundle.js",
   },
+
+  //配置插件
+  plugins: [
+    new HtmlWebpackPlugin({
+      //指定要打包的模板页面
+      //就会将index.html 打包到与 bundle.js 同级目录
+      //同时在 index.html 中会自动的使用script标签引入bundle.js
+      template: "./index.html",
+    }),
+  ],
   module: {
     rules: [
       {
