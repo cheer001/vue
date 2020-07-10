@@ -63,4 +63,10 @@ module.exports = {
       },
     ],
   },
+  //解析完整版 vue.js
+  // resolve: {
+  //   alias: {
+  //     vue$: "vue/dist/vue.js",
+  //   },
+  // },
 };
