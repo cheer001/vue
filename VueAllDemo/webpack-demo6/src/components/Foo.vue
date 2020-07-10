@@ -1,7 +1,7 @@
 <template>
   <div id="container">
-    <h1>我是Foo子组件</h1>
-    <h2>我是Foo子组件 h2---</h2>
+    <h1>我是Foo子组件111</h1>
+    <h2>我是Foo子组件 h2</h2>
   </div>
 </template>
 

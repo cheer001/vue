@@ -4,6 +4,8 @@ const path = require("path");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 //1.引入vue-loader插件
 const VueLoaderPlugin = require("vue-loader/lib/plugin");
+//1.导入webpack插件
+const webpack = require("webpack");
 
 //导出一个webpack具有特殊属性配置的对象
 module.exports = {
@@ -19,6 +21,8 @@ module.exports = {
   //实时重新加载
   devServer: {
     contentBase: "./dist",
+    //2.开启模块热加载
+    hot: true,
   },
   //配置插件
   plugins: [
@@ -30,6 +34,8 @@ module.exports = {
     }),
     //3.请确保引入这个插件
     new VueLoaderPlugin(),
+    //3.配置模块热替换
+    new webpack.HotModuleReplacementPlugin(),
   ],
   module: {
     rules: [
