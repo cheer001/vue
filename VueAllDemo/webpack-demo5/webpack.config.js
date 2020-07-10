@@ -14,7 +14,10 @@ module.exports = {
     path: path.join(__dirname, "./dist/"), //打包的结果文件生成的目录必须是绝对路径
     filename: "bundle.js",
   },
-
+  //实时重新加载
+  devServer: {
+    contentBase: "./dist",
+  },
   //配置插件
   plugins: [
     new HtmlWebpackPlugin({
