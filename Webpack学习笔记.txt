@@ -157,8 +157,61 @@ Loder可以理解为是模块和资源的转换器，它本身是一个函数，
 					presets: ["@babel/preset-env"], //babel中内置的转换规则工具
 				  },
 				},
-<<<<<<< HEAD
-			  },
-=======
-			  },
->>>>>>> d0939a9746f1747bff021a1b3122703ece3387aa
+
+
+
+第七章学习总结(Vue-Loader 打包Vue单文件组件):
+打包Vue 基本配置(步骤)：
+	1.安装vue-loader和vue-template-compiler
+		npm install -D vue-loader vue-template-compiler
+		这里如果遇到Vue packages version mismatch问题
+			解决方案:(将vue-template-compiler模块与vue的版本保持一致)
+				npm un vue-template-compiler
+				npm i -D vue-template-compiler@2.6.10
+	2.修改 webpack.config.js 配置	
+		module: {
+			rules: [
+				// ... 其它规则
+				{
+					test: /\.vue$/,
+					loader: 'vue-loader'
+				}
+			]
+		},
+		plugins: [
+			// 请确保引入这个插件！
+			new VueLoaderPlugin()
+		]
+webpack与 Vue 单文件组件案例：
+	警告问题：
+		默认引入的是运行版的vue.js，没有编译功能，所以会发出警告
+	解决警告问题的三种解决方案：
+		一：手动的引入指定的版本，引入完整版
+			import Vue from "vue/dist/vue";
+		二：采用webpack配置完整版vue.js
+			//解析完整版 vue.js
+		   resolve: {
+			 alias: {
+			   vue$: "vue/dist/vue.js",
+			 },
+		   },
+		三(推荐):使用 render 函数来渲染组件
+			new Vue({
+			  render: (h) => h(App), //ES6箭头函数
+			}).$mount("#app");
+.vue 单文件组件完整版：
+	在 <script> 导出一个默认成员对象，就是当前组件对象，Vue的 data/methods等选项直接定义在此对象中
+	在 <style> 上使用 scoped 属性，CSS 样式只在当前组件有效，否则样式会自动作用到父子组件中。
+模块热替换（HMR）：
+	模块热替换(hot module replacement 或 HMR)是 webpack 提供的最有用的功能之一。
+	模块热替换无需完全刷新页面，局部无刷新的情况下就可以更新。
+	配置(步骤):
+		首先确保有安装：npm install --save-dev webpack-dev-server
+		1.导入webpack插件
+			const webpack = require('webpack');
+		2.开启模块热加载
+			devServer: {
+				hot: true,
+			},
+		3.配置模块热替换
+			new webpack.HotModuleReplacementPlugin(),
