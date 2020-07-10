@@ -94,7 +94,11 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _css_style_css__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_css_style_css__WEBPACK_IMPORTED_MODULE_0__);
 // 将样式文件css以模块化形式引入
 
-
+var a = 1;
+var arr = [1, 2, 3];
+arr.forEach(function (item) {
+  console.log(item);
+});
 
 /***/ }),
 /* 1 */

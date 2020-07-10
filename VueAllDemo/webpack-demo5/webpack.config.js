@@ -41,6 +41,17 @@ module.exports = {
         test: /\.(png|svg|jpg|gif)$/,
         use: ["file-loader"],
       },
+      //解决兼容性问题
+      {
+        test: /\.m?js$/,
+        exclude: /(node_modules)/, //排除的目录
+        use: {
+          loader: "babel-loader",
+          options: {
+            presets: ["@babel/preset-env"], //babel中内置的转换规则工具
+          },
+        },
+      },
     ],
   },
 };
