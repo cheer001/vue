@@ -113,3 +113,23 @@ Loder可以理解为是模块和资源的转换器，它本身是一个函数，
 		           template: './index.html'
 		       })
 		   ],
+
+
+
+第五章学习总结(实时重新加载):
+前面遇到的问题：
+	每一次手动打包很麻烦，打包后还需要手动刷新浏览器
+解决方案:
+	采用webpack提供的工具：webpack-dev-server，它允许在项目运行时更新所有类型的模块后，
+	 而无需手动打包和刷新页面，它会自动打包和刷新页面
+实操：
+	1.安装依赖：
+		npm install --save-dev webpack-dev-server
+	2.修改 webpack.config.js 配置
+	 	// 实时重新加载
+	   devServer: {
+	       contentBase: './dist'
+	   },
+	3.修改 package.json 的 scripts 
+		--open选项打包成功后，自动打开浏览器
+		"dev": "webpack-dev-server --open" 
