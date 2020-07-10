@@ -133,3 +133,28 @@ Loder可以理解为是模块和资源的转换器，它本身是一个函数，
 	3.修改 package.json 的 scripts 
 		--open选项打包成功后，自动打开浏览器
 		"dev": "webpack-dev-server --open" 
+		
+		
+第六章学习总结(Babel 浏览器兼容性):
+遇到的问题：
+	找IE7中不能识别ES5代码的问题
+解决方案：
+	使用babel插件，将ES6代码转换为ES5代码
+实操：
+	1.安装babel
+		npm install -D babel-loader @babel/core @babel/preset-env1
+	2.配置 webapck.conﬁg.js 
+		module: {
+			rules: [
+			  //...
+			  //解决兼容性问题
+			  {
+				test: /\.m?js$/,
+				exclude: /(node_modules)/, //排除的目录
+				use: {
+				  loader: "babel-loader",
+				  options: {
+					presets: ["@babel/preset-env"], //babel中内置的转换规则工具
+				  },
+				},
+			  },
