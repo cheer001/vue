@@ -51,3 +51,65 @@ VSCode 中安装插件 Node Snippets ,有代码快捷提示
 	非默认成员必须要有成员名称
 	按需导入指定成员，采用结构赋值的方式
 	一次性导入模块文件中的所有成员(包含default)
+	
+	
+第四章学习总结(打包CSS/Images等资源):
+由于Webpack本身只能处理JavaScript模块，如果要处理其他类型的文件，就需要结合插件来使用，
+ 这些插件在Webpack中被称为Loder(加载器)来进行转换
+Loder可以理解为是模块和资源的转换器，它本身是一个函数，参数接受的是源文件，
+ 返回值是转换后的结果
+这样我们就可以通过require或import来加载任何类型的模块文件，比如CSS、图片
+打包CSS资源(步骤)：
+	1.安装style-loader和css-loader依赖
+		npm install --save-dev style-loader css-loader1
+		首先安装Loader插件：
+			css-loader是将css装载到javascript;
+			style-loader是让javascript认识css
+	2.修改webpack.config.js
+		module: { // 模块
+		       rules: [ // 规则
+		           {
+		               test: /\.css$/, // 正则表达式，匹配 .css 文件资源
+		               use: [  // 使用的 Loader ,注意顺序不能错
+		                   'style-loader',
+		                   'css-loader'
+		               ]
+		           }
+		       ]
+		   }
+打包Images资源(步骤)：
+	1.安装file-loader依赖
+		install --save-dev file-loade
+	2.修改webpack.config.js
+		module: { // 模块
+		       rules: [ // 规则
+		           //...
+					 {
+					   	test: /\.(png|svg|jpg|gif)$/,
+					    use: [
+					    'file-loader'
+					 }
+				]
+	问题：
+		如果直接访问根目录下的 index.html ,那么图片资源路径就无法访问到。
+	解决方案：
+		把index.html放到dist目录中。
+	但是dist是打包编译的结果，而非源码，所以把index.html放到dist就不合适，
+	 而且如果bundle.js文件名有变动的话，index.html文件也得跟着改
+	综合以上问题，可以使用一个插件：Html-webpack-plugin来解决。
+使用HtmlWebpackPlugin插件(步骤):
+	作用：解决文件路径问题
+		将index.html打包到bundle.js所在目录中
+		同时也会在index.html中自动的使用<script>引入bundle.js
+	1.安装插件
+		npm install --save-dev html-webpack-plugin
+	2.修改 webpack.conﬁg.js
+		// 配置插件
+		   plugins: [
+		       new HtmlWebpackPlugin({
+		           // 此插件作用是将 index.html 打包到 bundle.js 所在目录中,
+		           // 同时也会在 index.html 中自动的 <script> 引入 bundle.js
+		           // 注意：其中的文件名 bundle 取决于上面output.filename中指定的名称
+		           template: './index.html'
+		       })
+		   ],
