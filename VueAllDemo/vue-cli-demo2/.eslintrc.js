@@ -1,14 +1,14 @@
 module.exports = {
   root: true,
   env: {
-    node: true
+    node: true,
   },
   extends: ["plugin:vue/essential", "eslint:recommended", "@vue/prettier"],
   parserOptions: {
-    parser: "babel-eslint"
+    parser: "babel-eslint", //用来 指定eslint 解析器
   },
   rules: {
-    "no-console": process.env.NODE_ENV === "production" ? "warn" : "off",
-    "no-debugger": process.env.NODE_ENV === "production" ? "warn" : "off"
-  }
+    // 配置检查规则
+    semi: [2, "always"], //总是需要分号
+  },
 };
