@@ -1,0 +1,92 @@
+## 上传安装包到服务器
+- 使用 filezilla 工具连接服务器
+- 创建 /usr/soft/
+- 上传 install_nginx.sh 和 nginx-1.16.0.tar.gz 到 /usr/soft/
+
+## 查看卸载操作
+- 使用 SecureCRT 连接服务器
+- 清屏快捷键
+Ctrl+l(小写的L) 
+- 查看已经安装软件包
+```shell
+rpm -qa
+```
+- 卸载已安装的软件
+```shell
+rpm -e 软件名
+```
+
+## 安装 nginx 依赖包
+> 安装时有提示输入，直接输入 y 按回车即可
+- 安装 gcc，编译 nginx
+```shell
+yum install gcc-c++
+```
+- 安装 pcre，nginx 使用它解析正则表达式
+```shell
+yum install -y pcre pcre-devel
+```
+- 安装 zlib，提供了很多种压缩和解压方式，nginx 使用它对 http 包内容进行解压
+```shell
+yum install -y zlib zlib-devel
+```
+- 安装 openssl，nginx 支持http和https协议需要依赖它
+```shell
+yum install -y openssl openssl-devel
+```
+
+
+## 赋予脚本执行权限, 执行脚本
+- 查看 /opt/soft/install_nginx.sh 脚本内容
+> 注意：脚本内容中的换行符 Unix状态下的，
+> windows转换Unix风格: 编辑 -> 档案格式转换 -> 转为XXX格式
+```shell
+cat /opt/soft/install_nginx.sh
+
+#!/bin/bash
+cd /opt/soft
+tar -zxvf nginx-1.16.0.tar.gz
+cd nginx-1.16.0/
+./configure \
+--prefix=/usr/local/nginx \
+--with-http_stub_status_module \
+--with-http_ssl_module
+make && make install
+```
+
+- 为所有者（u）增加脚本执行权限(+v)
+```shell
+chmod u+x install_nginx.sh
+```
+- 执行脚本
+```shell
+./install_nginx.sh
+```
+
+## 启动与停止 nginx
+- 进入安装目录
+```shell
+cd /usr/local/nginx/sbin/
+```
+- 启动 nginx
+```shell
+./nginx
+```
+- 查看启动的 nginx 进程
+```shell
+ps -ef|grep nginx
+```
+- 结束进程
+```shell
+kill -9 进程号
+```
+- 检测 nginx 语法是否正确
+```shell
+./nginx -t
+```
+- 重新加载配置|重启|退出(正常关闭)|停止(强制关闭)
+```shell
+./nginx -s reload|reopen|quit|stop
+```
+- 查看端口号是否被占用 
+netstat -anp|grep 8888
