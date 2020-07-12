@@ -31,6 +31,8 @@
       //删除喜好
       deleteHobby(index) {
         this.hobbies.splice(index, 1);
+        //删除成功后,发布消息,导航统计数据
+        PubSub.publish("changeNum",1);
       },
       //删除指定下标的数据
       //因为删除emp会对empList做更新操作
