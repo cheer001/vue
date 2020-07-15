@@ -7,7 +7,10 @@ import axios from "axios";
 
 const request = axios.create({
   //   baseURL: "/dev-api", //
-  baseURL: "/", //
+  // baseURL: "/", //
+  // /db.json  > 通过 axios> /dev-api/db.json >  通过代理转发(vue.config.js)  >> http://localhost:8001/db.json
+  // baseURL: "/dev-api", //
+  baseURL: process.env.VUE_APP_BASE_API, //请求路径的基础URL(也就是前缀)
   timeout: 5000 //请求超时.5000毫秒
 });
 

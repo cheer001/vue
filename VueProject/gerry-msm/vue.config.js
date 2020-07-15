@@ -4,14 +4,17 @@ module.exports = {
     host: "localhost", //主机名， 127.0.0.1， 真机 0.0.0.0
     https: false, //协议
     open: true, //启动服务时自动打开浏览器访问
-    proxy:{//开发环境代理配置
-      "/dev-api":{
+    proxy: {
+      //开发环境代理配置  只针对开发环境,生产环境不用这一套配置(会失效)
+      // "/dev-api": {
+      [process.env.VUE_APP_BASE_API]: {
         //目标服务器地址,代理访问 http://localhost:8001
-        target:"http://localhost:8001",
-        changeOrigin:true, //开启代理服务器
-        pathRewrite:{
+        target: process.env.VUE_APP_SERVICE_URL,
+        changeOrigin: true, //开启代理服务器
+        pathRewrite: {
           // /dev-api/db.json 最终会发送 http://localhost:8001/db.json
-          "^/dev-api":"",
+          // "^/dev-api": ""
+          ["^" + process.env.VUE_APP_BASE_API]: ""
         }
       }
     }
