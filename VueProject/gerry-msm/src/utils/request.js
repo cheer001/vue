@@ -14,10 +14,10 @@ const request = axios.create({
   timeout: 5000 //请求超时.5000毫秒
 });
 
-request.get("/db.json").then(response => {
-  const data = response.data;
-  console.log(data);
-});
+// request.get("/db.json").then(response => {
+//   const data = response.data;
+//   console.log(data);
+// });
 
 //请求拦截器
 request.interceptors.request.use(
