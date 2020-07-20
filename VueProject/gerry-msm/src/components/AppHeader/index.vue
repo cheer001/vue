@@ -30,7 +30,7 @@ export default {
   methods: {
     handleCommand(command) {
       console.log(`点击了${command}`);
-      const token = localStorage.getItem("gerry-msm-usertoken");
+      const token = localStorage.getItem("gerry-msm-token");
       switch (command) {
         case "editPWD":
           //修改密码
@@ -43,7 +43,7 @@ export default {
             if (res.flag) {
               //退出成功
               //清除本地数据
-              localStorage.removeItem("gerry-msm-usertoken");
+              localStorage.removeItem("gerry-msm-token");
               localStorage.removeItem("gerry-msm-user");
               //回到登录页面
               this.$router.push("/login");

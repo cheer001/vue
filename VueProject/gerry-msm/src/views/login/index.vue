@@ -60,7 +60,7 @@ export default {
                     "gerry-msm-user",
                     JSON.stringify(resUser.data)
                   );
-                  localStorage.setItem("gerry-msm-usertoken", res.data.token);
+                  localStorage.setItem("gerry-msm-token", res.data.token);
                   //前往首页
                   this.$router.push("/");
                 } else {

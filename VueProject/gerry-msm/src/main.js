@@ -10,6 +10,9 @@ import router from "./router";
 //使用ElementUI
 Vue.use(ElementUI);
 
+//权限拦截
+import "./router/permission";
+
 Vue.config.productionTip = process.env.NODE_ENV === "production";
 console.log(process.env.NODE_ENV); //开发环境development  ,生产环境production
 console.log(process.env.VUE_APP_SERVICE_URL);
