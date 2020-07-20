@@ -1,22 +1,18 @@
 <template>
   <div>
-    <h2 v-if="user">欢迎您!---{{ user.name }}</h2>
+    <h1>欢迎访问gerry会员管理系统</h1>
   </div>
 </template>
 
 <script>
 export default {
-  mounted() {
-    if (localStorage.getItem("gerry-msm-user")) {
-      this.user = JSON.parse(localStorage.getItem("gerry-msm-user"));
-    }
-  },
   data() {
-    return {
-      user: undefined
-    };
+    return {};
   }
 };
 </script>
-
-<style scoped lang="scss"></style>
+<style scoped>
+div {
+  text-align: center;
+}
+</style>

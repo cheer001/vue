@@ -42,8 +42,8 @@ export default {
     submitForm(formName) {
       this.$refs[formName].validate(valid => {
         console.log(valid); //
+        //提交表单给后台进行验证是否正确
         if (valid) {
-          //提交表单给后台进行验证时候正确
           //   console.log(valid);
           login(this.form.username, this.form.password).then(respose => {
             console.log(respose.data);
@@ -73,6 +73,7 @@ export default {
             } else {
               // 未通过登录,弹出警告
               //   alert(res.message);
+              // $message是ElementUI 中的方法,像 $router 一样
               this.$message({
                 message: res.message,
                 type: "warning"
