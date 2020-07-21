@@ -5,9 +5,24 @@
 </template>
 
 <script>
+import memberApi from "@/api/member";
 export default {
   data() {
-    return {};
+    return {
+      list: []
+    };
+  },
+  created() {
+    this.fetchData();
+  },
+  methods: {
+    fetchData() {
+      memberApi.getList().then(response => {
+        const res = response.data;
+        console.log(res);
+        this.list = res.data;
+      });
+    }
   },
   components: {}
 };
