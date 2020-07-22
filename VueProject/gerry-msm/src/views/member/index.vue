@@ -1,5 +1,43 @@
 <template>
   <div>
+    <!-- :inline="true" 行内表单 -->
+    <el-form
+      ref="searchForm"
+      :inline="true"
+      :model="searchMap"
+      class="demo-form-inline"
+      style="margin-top:20px"
+    >
+      <el-form-item>
+        <el-input v-model="searchMap.cardNum" placeholder="会员卡号"></el-input>
+      </el-form-item>
+      <el-form-item>
+        <el-input v-model="searchMap.name" placeholder="会员名称"></el-input>
+      </el-form-item>
+      <el-form-item>
+        <el-select v-model="searchMap.payType" placeholder="支付类型">
+          <el-option
+            v-for="option in payTypeOptions"
+            :key="option.type"
+            :label="option.name"
+            :value="option.type"
+          ></el-option>
+        </el-select>
+      </el-form-item>
+      <el-form-item>
+        <!-- value-format="yyyy-MM-dd"  : 指定绑定值的格式 -->
+        <el-date-picker
+          v-model="searchMap.birthday"
+          type="date"
+          placeholder="出生日期"
+          value-format="yyyy-MM-dd"
+        >
+        </el-date-picker>
+      </el-form-item>
+      <el-form-item>
+        <el-button type="primary" @click="fetchData">查询</el-button>
+      </el-form-item>
+    </el-form>
     <!-- 数据列表
         :data  绑定渲染的数据
         border 表格边框
@@ -46,6 +84,7 @@
         </template>
       </el-table-column>
     </el-table>
+    <!-- 分页组件 -->
     <el-pagination
       @size-change="fetchData"
       @current-change="fetchData"
@@ -76,7 +115,8 @@ export default {
       total: 0, //总记录数
       currentPage: 1, //页码
       pageSize: 10, //每页显示10条数据
-      searchMap: {} //查询条件绑定的条件值
+      searchMap: {}, //查询条件绑定的条件值
+      payTypeOptions //将全局变量绑定到vue实例中
     };
   },
   created() {
