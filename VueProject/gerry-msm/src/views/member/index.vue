@@ -46,6 +46,16 @@
         </template>
       </el-table-column>
     </el-table>
+    <el-pagination
+      @size-change="fetchData"
+      @current-change="fetchData"
+      :current-page="currentPage"
+      :page-sizes="[10, 20, 30, 40, 50]"
+      :page-size="pageSize"
+      layout="total, sizes, prev, pager, next, jumper"
+      :total="total"
+    >
+    </el-pagination>
   </div>
 </template>
 
@@ -62,7 +72,11 @@ const payTypeOptions = [
 export default {
   data() {
     return {
-      list: []
+      list: [],
+      total: 0, //总记录数
+      currentPage: 1, //页码
+      pageSize: 10, //每页显示10条数据
+      searchMap: {} //查询条件绑定的条件值
     };
   },
   created() {
@@ -70,11 +84,15 @@ export default {
   },
   methods: {
     fetchData() {
-      memberApi.getList().then(response => {
-        const res = response.data;
-        console.log(res);
-        this.list = res.data;
-      });
+      //调用分页查询数据
+      memberApi
+        .search(this.currentPage, this.pageSize, this.searchMap)
+        .then(response => {
+          const res = response.data;
+          console.log(res);
+          this.list = res.data.rows;
+          this.total = res.data.total;
+        });
     },
     handleEdit(id) {
       console.log("编辑", id);
