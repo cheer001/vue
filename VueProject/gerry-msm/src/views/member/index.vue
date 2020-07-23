@@ -38,6 +38,11 @@
         <el-button type="primary" @click="fetchData">查询</el-button>
         <el-button @click="resetForm('searchForm')">重置</el-button>
       </el-form-item>
+      <el-form-item style="float:right">
+        <el-button type="primary" @click="dialogFormVisible = true">
+          新增
+        </el-button>
+      </el-form-item>
     </el-form>
     <!-- 数据列表
         :data  绑定渲染的数据
@@ -96,6 +101,66 @@
       :total="total"
     >
     </el-pagination>
+
+    <el-dialog title="会员编辑" :visible.sync="dialogFormVisible" width="500">
+      <!-- status-icon  当表单效验不通过时，输入框右侧有个x小图标 -->
+      <el-form
+        status-icon
+        ref="pojoForm"
+        :model="pojo"
+        :rules="rules"
+        label-width="100px"
+        label-position="right"
+        style="width:400px"
+      >
+        <el-form-item label="会员卡号" prop="cardNum">
+          <el-input v-model="pojo.cardNum"></el-input>
+        </el-form-item>
+        <el-form-item label="会员姓名" prop="name">
+          <el-input v-model="pojo.name"></el-input>
+        </el-form-item>
+        <el-form-item label="会员生日" prop="birthday">
+          <el-date-picker
+            v-model="pojo.birthday"
+            type="date"
+            placeholder="请点击选择"
+          ></el-date-picker>
+        </el-form-item>
+        <el-form-item label="手机号码" prop="phone">
+          <el-input v-model="pojo.phone"></el-input>
+        </el-form-item>
+        <el-form-item label="开卡金额" prop="money">
+          <el-input v-model="pojo.money"></el-input>
+        </el-form-item>
+        <el-form-item label="可用积分" prop="integer">
+          <el-input v-model="pojo.integer"></el-input>
+        </el-form-item>
+        <el-form-item label="支付类型" prop="payType">
+          <el-select v-model="pojo.payType" placeholder="请点击选择">
+            <el-option
+              v-for="option in payTypeOptions"
+              :key="option.type"
+              :label="option.name"
+              :value="option.type"
+            ></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="会员地址" prop="address">
+          <el-input
+            v-model="pojo.address"
+            type="textarea"
+            :autosize="{ minRows: 2, maxRows: 4 }"
+            placeholder="请输入地址"
+          ></el-input>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="dialogFormVisible = false">取 消</el-button>
+        <el-button type="primary" @click="addMember('pojoForm')">
+          确 定
+        </el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
@@ -116,14 +181,68 @@ export default {
       total: 0, //总记录数
       currentPage: 1, //页码
       pageSize: 10, //每页显示10条数据
-      searchMap: {}, //查询条件绑定的条件值
-      payTypeOptions //将全局变量绑定到vue实例中
+      searchMap: {
+        cardNum: "",
+        name: "",
+        payType: "",
+        birthday: ""
+      }, //查询条件绑定的条件值
+      payTypeOptions, //支付类型   将全局变量绑定到vue实例中
+      pojo: {
+        cardNum: "",
+        name: "",
+        birthday: "",
+        phone: "",
+        money: 0,
+        integer: 0,
+        payType: "",
+        address: ""
+      }, //提交的数据
+      dialogFormVisible: false, //控制新增对话框
+      rules: {
+        cardNum: [
+          { required: true, message: "会员卡号不能为空", trigger: "blur" }
+        ],
+        name: [
+          { required: true, message: "会员姓名不能为空", trigger: "blur" }
+        ],
+        payType: [
+          { required: true, message: "请选择支付类型", trigger: "blur" }
+        ]
+      }
     };
   },
   created() {
     this.fetchData();
   },
   methods: {
+    addMember(formName) {
+      this.$refs[formName].validate(valid => {
+        if (valid) {
+          //验证通过，提交添加
+          memberApi.addMember(this.pojo).then(response => {
+            const res = response.data;
+            if (res.flag) {
+              //新增成功，刷新列表数据
+              this.$message({
+                message: res.message,
+                type: "success"
+              });
+              this.fetchData();
+              this.dialogFormVisible = false;
+            } else {
+              this.$message({
+                message: res.message,
+                type: "warning"
+              });
+            }
+          });
+        } else {
+          //验证不通过
+          return false;
+        }
+      });
+    },
     resetForm(formName) {
       console.log("重置", formName);
       this.$refs[formName].resetFields();
