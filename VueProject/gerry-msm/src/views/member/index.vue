@@ -86,8 +86,8 @@
     </el-table>
     <!-- 分页组件 -->
     <el-pagination
-      @size-change="fetchData"
-      @current-change="fetchData"
+      @size-change="handleSizeChange"
+      @current-change="handleCurrentChange"
       :current-page="currentPage"
       :page-sizes="[10, 20, 30, 40, 50]"
       :page-size="pageSize"
@@ -123,6 +123,18 @@ export default {
     this.fetchData();
   },
   methods: {
+    //当每页显示条数改变后，被触发，val是最新的每页显示条数
+    handleSizeChange(val) {
+      console.log("pageSize", val);
+      this.pageSize = val;
+      this.fetchData();
+    },
+    //当页码改变后，被触发，val是最新的页码
+    handleCurrentChange(val) {
+      console.log("currentPage", val);
+      this.currentPage = val;
+      this.fetchData();
+    },
     fetchData() {
       //调用分页查询数据
       memberApi
