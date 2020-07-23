@@ -8,13 +8,13 @@
       class="demo-form-inline"
       style="margin-top:20px"
     >
-      <el-form-item>
+      <el-form-item prop="cardNum">
         <el-input v-model="searchMap.cardNum" placeholder="会员卡号"></el-input>
       </el-form-item>
-      <el-form-item>
+      <el-form-item prop="name">
         <el-input v-model="searchMap.name" placeholder="会员名称"></el-input>
       </el-form-item>
-      <el-form-item>
+      <el-form-item prop="payType">
         <el-select v-model="searchMap.payType" placeholder="支付类型">
           <el-option
             v-for="option in payTypeOptions"
@@ -24,7 +24,7 @@
           ></el-option>
         </el-select>
       </el-form-item>
-      <el-form-item>
+      <el-form-item prop="birthday">
         <!-- value-format="yyyy-MM-dd"  : 指定绑定值的格式 -->
         <el-date-picker
           v-model="searchMap.birthday"
@@ -36,6 +36,7 @@
       </el-form-item>
       <el-form-item>
         <el-button type="primary" @click="fetchData">查询</el-button>
+        <el-button @click="resetForm('searchForm')">重置</el-button>
       </el-form-item>
     </el-form>
     <!-- 数据列表
@@ -123,6 +124,10 @@ export default {
     this.fetchData();
   },
   methods: {
+    resetForm(formName) {
+      console.log("重置", formName);
+      this.$refs[formName].resetFields();
+    },
     //当每页显示条数改变后，被触发，val是最新的每页显示条数
     handleSizeChange(val) {
       console.log("pageSize", val);
