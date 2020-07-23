@@ -39,7 +39,7 @@
         <el-button @click="resetForm('searchForm')">重置</el-button>
       </el-form-item>
       <el-form-item style="float:right">
-        <el-button type="primary" @click="dialogFormVisible = true">
+        <el-button type="primary" @click="handleAddMember">
           新增
         </el-button>
       </el-form-item>
@@ -216,6 +216,20 @@ export default {
     this.fetchData();
   },
   methods: {
+    //弹出新增窗口
+    handleAddMember() {
+      this.dialogFormVisible = true;
+      /*
+        this.$nextTick() 是一个异步事件，当Dom全部渲染结束之后，它的回调函数才会被执行
+         弹出窗口打开之后，需要加载Dom，就需要花费一点时间，我们就应该等待它加载完dom之后，
+         再进行调用resetFields，重置表单和清除样式，如果在不使用$nextTick的情况下，
+         使用表单中的方法就会报错，因为在dom渲染过程中这些方法还没有定义出来
+      */
+      this.$nextTick(() => {
+        this.$refs["pojoForm"].resetFields();
+      });
+    },
+    //提交新增会员数据
     addMember(formName) {
       this.$refs[formName].validate(valid => {
         if (valid) {
