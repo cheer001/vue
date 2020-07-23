@@ -124,6 +124,14 @@
         label-position="right"
         style="width:400px"
       >
+        <!-- 
+          添加一个隐藏的id值,每次打开编辑窗口会先被清空,
+          如果是新增操作id则为null,如果是更新操作id则会被查询出来的会员ID覆盖(就不为null),
+          用于编辑会员信息的时候来标识当前属于哪种窗口
+        -->
+        <el-form-item prop="id" v-show="false">
+          <el-input v-model="pojo.cardNum"></el-input>
+        </el-form-item>
         <el-form-item label="会员卡号" prop="cardNum">
           <el-input v-model="pojo.cardNum"></el-input>
         </el-form-item>
@@ -143,8 +151,8 @@
         <el-form-item label="开卡金额" prop="money">
           <el-input v-model="pojo.money"></el-input>
         </el-form-item>
-        <el-form-item label="可用积分" prop="integer">
-          <el-input v-model="pojo.integer"></el-input>
+        <el-form-item label="可用积分" prop="integral">
+          <el-input v-model="pojo.integral"></el-input>
         </el-form-item>
         <el-form-item label="支付类型" prop="payType">
           <el-select v-model="pojo.payType" placeholder="请点击选择">
@@ -167,7 +175,12 @@
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogFormVisible = false">取 消</el-button>
-        <el-button type="primary" @click="addMember('pojoForm')">
+        <el-button
+          type="primary"
+          @click="
+            pojo.id === null ? addMember('pojoForm') : updateMember('pojoForm')
+          "
+        >
           确 定
         </el-button>
       </div>
@@ -200,12 +213,13 @@ export default {
       }, //查询条件绑定的条件值
       payTypeOptions, //支付类型   将全局变量绑定到vue实例中
       pojo: {
+        id: null,
         cardNum: "",
         name: "",
         birthday: "",
         phone: "",
         money: 0,
-        integer: 0,
+        integral: 0,
         payType: "",
         address: ""
       }, //提交的数据
@@ -227,6 +241,33 @@ export default {
     this.fetchData();
   },
   methods: {
+    updateMember(formName) {
+      this.$refs[formName].validate(valid => {
+        if (valid) {
+          //提交更新
+          memberApi.updateMember(this.pojo).then(response => {
+            const res = response.data;
+            if (res.flag) {
+              //更新成功，刷新列表数据
+              this.$message({
+                message: res.message,
+                type: "success"
+              });
+              this.fetchData();
+              // this.pojo.id = null;
+              this.dialogFormVisible = false;
+            } else {
+              this.$message({
+                message: res.message,
+                type: "warning"
+              });
+            }
+          });
+        } else {
+          return false;
+        }
+      });
+    },
     //弹出新增窗口
     handleAddMember() {
       this.dialogFormVisible = true;
@@ -297,6 +338,13 @@ export default {
     },
     handleEdit(id) {
       console.log("编辑", id);
+      this.handleAddMember();
+      memberApi.getMemberById(id).then(response => {
+        const res = response.data;
+        if (res.flag) {
+          this.pojo = res.data;
+        }
+      });
     },
     handleDelete(id) {
       console.log("删除", id);

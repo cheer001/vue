@@ -40,5 +40,30 @@ export default {
       method: "post",
       data: pojo
     });
+  },
+  /**
+   *通过会员ID查询会员信息
+   *
+   * @param {*} id 会员ID
+   * @returns 查询的会员信息
+   */
+  getMemberById(id) {
+    return request({
+      url: `/member/getMemberById/${id}`,
+      method: "get"
+    });
+  },
+  /**
+   *更新会员信息
+   *
+   * @param {*} pojo 会员实体
+   * @returns 更新成功的验证信息
+   */
+  updateMember(pojo) {
+    return request({
+      url: `/member/updateMember/${pojo.id}`,
+      method: "put",
+      data: pojo
+    });
   }
 };
