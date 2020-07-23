@@ -35,11 +35,22 @@
         </el-date-picker>
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" @click="fetchData">查询</el-button>
-        <el-button @click="resetForm('searchForm')">重置</el-button>
+        <el-button type="primary" icon="el-icon-search" @click="fetchData">
+          查询
+        </el-button>
+        <el-button
+          icon="el-icon-remove-outline"
+          @click="resetForm('searchForm')"
+        >
+          重置
+        </el-button>
       </el-form-item>
       <el-form-item style="float:right">
-        <el-button type="primary" @click="handleAddMember">
+        <el-button
+          type="primary"
+          icon="el-icon-circle-plus-outline"
+          @click="handleAddMember"
+        >
           新增
         </el-button>
       </el-form-item>
