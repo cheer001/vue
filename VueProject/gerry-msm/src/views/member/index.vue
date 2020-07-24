@@ -328,7 +328,7 @@ export default {
     fetchData() {
       //调用分页查询数据
       memberApi
-        .search(this.currentPage, this.pageSize, this.searchMap)
+        .getMemberList(this.currentPage, this.pageSize, this.searchMap)
         .then(response => {
           const res = response.data;
           console.log(res);

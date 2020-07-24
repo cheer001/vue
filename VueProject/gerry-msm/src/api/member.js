@@ -8,7 +8,7 @@ export default {
    */
   getList() {
     return request({
-      url: "/member/list",
+      url: "/member/getMemberList",
       method: "get"
     });
   },
@@ -21,9 +21,9 @@ export default {
    * @param {*} searchMap 条件查询的条件值
    * @returns 会员列表
    */
-  search(page, size, searchMap) {
+  getMemberList(page, size, searchMap) {
     return request({
-      url: `/member/list/search/${page}/${size}`,
+      url: `/member/getMemberList/${page}/${size}`,
       method: "post",
       data: searchMap
     });
