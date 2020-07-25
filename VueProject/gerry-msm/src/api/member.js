@@ -14,7 +14,7 @@ export default {
   },
 
   /**
-   *分页搜索方法
+   *会员列表分页搜索方法
    *
    * @param {*} page 当前页码
    * @param {*} size 每页查询条数

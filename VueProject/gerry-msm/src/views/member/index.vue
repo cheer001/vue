@@ -55,6 +55,7 @@
         </el-button>
       </el-form-item>
     </el-form>
+
     <!-- 数据列表
         :data  绑定渲染的数据
         border 表格边框
@@ -101,6 +102,7 @@
         </template>
       </el-table-column>
     </el-table>
+
     <!-- 分页组件 -->
     <el-pagination
       @size-change="handleSizeChange"
@@ -113,6 +115,7 @@
     >
     </el-pagination>
 
+    <!-- 对话框表单 -->
     <el-dialog title="会员编辑" :visible.sync="dialogFormVisible" width="500">
       <!-- status-icon  当表单效验不通过时，输入框右侧有个x小图标 -->
       <el-form
@@ -129,9 +132,7 @@
           如果是新增操作id则为null,如果是更新操作id则会被查询出来的会员ID覆盖(就不为null),
           用于编辑会员信息的时候来标识当前属于哪种窗口
         -->
-        <el-form-item prop="id" v-show="false">
-          <el-input v-model="pojo.cardNum"></el-input>
-        </el-form-item>
+        <el-form-item label="会员ID" prop="id" v-show="false"> </el-form-item>
         <el-form-item label="会员卡号" prop="cardNum">
           <el-input v-model="pojo.cardNum"></el-input>
         </el-form-item>
@@ -241,26 +242,21 @@ export default {
     this.fetchData();
   },
   methods: {
+    //更新会员数据
     updateMember(formName) {
       this.$refs[formName].validate(valid => {
         if (valid) {
           //提交更新
           memberApi.updateMember(this.pojo).then(response => {
             const res = response.data;
+            this.$message({
+              message: res.message,
+              type: res.flag ? "success" : "warning"
+            });
             if (res.flag) {
               //更新成功，刷新列表数据
-              this.$message({
-                message: res.message,
-                type: "success"
-              });
               this.fetchData();
-              // this.pojo.id = null;
               this.dialogFormVisible = false;
-            } else {
-              this.$message({
-                message: res.message,
-                type: "warning"
-              });
             }
           });
         } else {
@@ -281,26 +277,21 @@ export default {
         this.$refs["pojoForm"].resetFields();
       });
     },
-    //提交新增会员数据
+    //新增会员数据
     addMember(formName) {
       this.$refs[formName].validate(valid => {
         if (valid) {
           //验证通过，提交添加
           memberApi.addMember(this.pojo).then(response => {
             const res = response.data;
+            this.$message({
+              message: res.message,
+              type: res.flag ? "success" : "warning"
+            });
             if (res.flag) {
               //新增成功，刷新列表数据
-              this.$message({
-                message: res.message,
-                type: "success"
-              });
               this.fetchData();
               this.dialogFormVisible = false;
-            } else {
-              this.$message({
-                message: res.message,
-                type: "warning"
-              });
             }
           });
         } else {
@@ -309,6 +300,7 @@ export default {
         }
       });
     },
+    //重置行内表单
     resetForm(formName) {
       console.log("重置", formName);
       this.$refs[formName].resetFields();
@@ -325,6 +317,7 @@ export default {
       this.currentPage = val;
       this.fetchData();
     },
+    //抓取数据
     fetchData() {
       //调用分页查询数据
       memberApi
@@ -336,6 +329,7 @@ export default {
           this.total = res.data.total;
         });
     },
+    //根据Id编辑会员
     handleEdit(id) {
       console.log("编辑", id);
       this.handleAddMember();
@@ -346,6 +340,7 @@ export default {
         }
       });
     },
+    //根据Id删除会员
     handleDelete(id) {
       console.log("删除", id);
       this.$confirm("是否删除该会员信息?", "提示", {
