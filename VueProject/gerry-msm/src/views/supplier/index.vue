@@ -51,7 +51,7 @@
         handleCurrentRowChange函数会接受两个参数:currentRow,oldCurrentRow
       -->
     <el-table
-      highlight-current-row
+      :highlight-current-row="isDialog"
       @current-change="handleCurrentRowChange"
       :data="list"
       height="380"
@@ -116,8 +116,15 @@
     >
     </el-pagination>
 
-    <!-- 对话框表单 -->
-    <el-dialog title="会员编辑" :visible.sync="dialogFormVisible" width="500">
+    <!--  对话框表单  
+      v-if="!isDialog"  父组件弹出只组件时不渲染，解决开销
+    -->
+    <el-dialog
+      v-if="!isDialog"
+      title="供应商编辑"
+      :visible.sync="dialogFormVisible"
+      width="500"
+    >
       <!-- status-icon  当表单效验不通过时，输入框右侧有个x小图标 -->
       <el-form
         status-icon

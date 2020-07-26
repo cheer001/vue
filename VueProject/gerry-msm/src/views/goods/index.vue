@@ -94,7 +94,7 @@
     >
     </el-pagination>
 
-    <!-- 选择供应商对话框 -->
+    <!-- 选择商品对话框 -->
     <el-dialog
       title="选择供应商"
       :visible.sync="dialogSupplierVisible"
