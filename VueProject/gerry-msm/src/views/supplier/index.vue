@@ -175,7 +175,24 @@ export default {
   methods: {
     //更新供应商
     updateSupplier(formName) {
-      console.log(formName);
+      this.$refs[formName].validate(valid => {
+        if (valid) {
+          supplierApi.updateSupplier(this.pojo).then(response => {
+            const res = response.data;
+            this.$message({
+              message: res.message,
+              type: res.flag ? "success" : "warning"
+            });
+            if (res.flag) {
+              //更新成功，刷新列表数据
+              this.fetchData();
+              this.dialogFormVisible = false;
+            }
+          });
+        } else {
+          return false;
+        }
+      });
     },
     //添加供应商
     addSupplier(formName) {
@@ -240,7 +257,19 @@ export default {
     },
     //根据Id编辑供应商
     handleEdit(id) {
-      console.log("编辑", id);
+      //清除原来的表单数据和校验
+      this.handleAddMember();
+      supplierApi.getSupplierById(id).then(response => {
+        const res = response.data;
+        if (res.flag) {
+          this.pojo = res.data;
+        } else {
+          this.$message({
+            message: res.message,
+            type: "warning"
+          });
+        }
+      });
     },
     //根据Id删除供应商
     handleDelete(id) {

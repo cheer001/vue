@@ -39,5 +39,30 @@ export default {
       method: "post",
       data: pojo
     });
+  },
+  /**
+   *通过供应商ID查询供应商信息
+   *
+   * @param {*} id 供应商ID
+   * @returns 查询的供应商信息
+   */
+  getSupplierById(id) {
+    return request({
+      url: `/supplier/getSupplierById/${id}`,
+      method: "get"
+    });
+  },
+  /**
+   *更新供应商信息
+   *
+   * @param {*} pojo 供应商实体
+   * @returns 更新成功的验证信息
+   */
+  updateSupplier(pojo) {
+    return request({
+      url: `/supplier/updateSupplier/${pojo.id}`,
+      method: "put",
+      data: pojo
+    });
   }
 };
