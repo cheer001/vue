@@ -273,7 +273,29 @@ export default {
     },
     //根据Id删除供应商
     handleDelete(id) {
-      console.log("删除", id);
+      this.$confirm("是否删除该供应商信息?", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning"
+      })
+        .then(() => {
+          //确认
+          supplierApi.deleteSupplier(id).then(response => {
+            const res = response.data;
+            this.$message({
+              type: res.flag ? "success" : "wraning",
+              message: res.message
+            });
+            if (res.flag) {
+              //删除成功，刷新列表数据
+
+              this.fetchData();
+            }
+          });
+        })
+        .catch(() => {
+          //取消
+        });
     }
   }
 };

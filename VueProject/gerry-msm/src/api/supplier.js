@@ -64,5 +64,17 @@ export default {
       method: "put",
       data: pojo
     });
+  },
+  /**
+   *根据汇演ID删除会员
+   *
+   * @param {*} id 会员ID
+   * @returns 删除成功的验证信息
+   */
+  deleteSupplier(id) {
+    return request({
+      url: `/supplier/deleteSupplier/${id}`,
+      method: "delete"
+    });
   }
 };
