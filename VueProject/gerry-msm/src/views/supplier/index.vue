@@ -11,10 +11,10 @@
       <el-form-item prop="name">
         <el-input v-model="searchMap.name" placeholder="供应商名称"></el-input>
       </el-form-item>
-      <el-form-item prop="linkman">
+      <el-form-item prop="linkman" v-if="!isDialog">
         <el-input v-model="searchMap.linkman" placeholder="联系人"></el-input>
       </el-form-item>
-      <el-form-item prop="mobile">
+      <el-form-item prop="mobile" v-if="!isDialog">
         <el-input v-model="searchMap.mobile" placeholder="联系电话"></el-input>
       </el-form-item>
       <el-form-item>
@@ -24,6 +24,7 @@
         <el-button
           icon="el-icon-remove-outline"
           @click="resetForm('searchForm')"
+          v-if="!isDialog"
         >
           重置
         </el-button>
@@ -33,6 +34,7 @@
           type="primary"
           icon="el-icon-circle-plus-outline"
           @click="handleAddMember"
+          v-if="!isDialog"
         >
           新增
         </el-button>
@@ -42,8 +44,20 @@
     <!-- 数据列表
         :data  绑定渲染的数据
         border 表格边框
-     -->
-    <el-table :data="list" height="380" border style="width: 100%">
+    -->
+    <!-- 
+        highlight-current-row  激活单选行
+        @current-change  当点击某一行后，会触发这个事件，从而调用对应的函数handleCurrentChange
+        handleCurrentRowChange函数会接受两个参数:currentRow,oldCurrentRow
+      -->
+    <el-table
+      highlight-current-row
+      @current-change="handleCurrentRowChange"
+      :data="list"
+      height="380"
+      border
+      style="width: 100%"
+    >
       <!-- type="index" 获取索引值,从1开始,label显示标题 -->
       <el-table-column type="index" label="序号" width="50" align="center">
       </el-table-column>
@@ -56,11 +70,22 @@
       </el-table-column>
       <el-table-column prop="linkman" label="联系人" align="center">
       </el-table-column>
-      <el-table-column prop="mobile" label="联系电话" align="center">
+      <el-table-column
+        prop="mobile"
+        label="联系电话"
+        align="center"
+        v-if="!isDialog"
+      >
       </el-table-column>
-      <el-table-column prop="remark" label="备注" width="120" align="center">
+      <el-table-column
+        prop="remark"
+        label="备注"
+        width="120"
+        align="center"
+        v-if="!isDialog"
+      >
       </el-table-column>
-      <el-table-column label="操作" width="150" align="center">
+      <el-table-column label="操作" width="150" align="center" v-if="!isDialog">
         <template slot-scope="scope">
           <el-button size="mini" @click="handleEdit(scope.row.id)"
             >编辑</el-button
@@ -77,12 +102,16 @@
 
     <!-- 分页组件 -->
     <el-pagination
+      :layout="
+        !isDialog
+          ? 'total, sizes, prev, pager, next, jumper'
+          : 'prev, pager, next'
+      "
       @size-change="handleSizeChange"
       @current-change="handleCurrentChange"
       :current-page="currentPage"
       :page-sizes="[10, 20, 30, 40, 50]"
       :page-size="pageSize"
-      layout="total, sizes, prev, pager, next, jumper"
       :total="total"
     >
     </el-pagination>
@@ -142,6 +171,10 @@
 <script>
 import supplierApi from "@/api/supplier";
 export default {
+  props: {
+    //接受父组件传递过来的数据，通过isDialog来判断 时候为弹框(true:弹框，false:列表)
+    isDialog: Boolean
+  },
   data() {
     return {
       list: [],
@@ -173,6 +206,12 @@ export default {
     this.fetchData();
   },
   methods: {
+    //当点击某一行时，调用这个函数进行处理
+    handleCurrentRowChange(currentRow) {
+      //点击后，将点击的数据传递到父组件（商品管理中），
+      //则可以通过触发父组件中的option-supplier  触发之后，父组件可以在option-supplier 这个事件对应的处理函数中进行接受数据currentRow
+      this.$emit("option-supplier", currentRow);
+    },
     //更新供应商
     updateSupplier(formName) {
       this.$refs[formName].validate(valid => {
