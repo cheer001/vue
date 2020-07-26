@@ -67,7 +67,7 @@ export default {
     });
   },
   /**
-   *根据汇演ID删除会员
+   *根据会员ID删除会员
    *
    * @param {*} id 会员ID
    * @returns 删除成功的验证信息

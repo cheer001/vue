@@ -66,9 +66,9 @@ export default {
     });
   },
   /**
-   *根据汇演ID删除会员
+   *根据供应商ID删除供应商
    *
-   * @param {*} id 会员ID
+   * @param {*} id 供应商ID
    * @returns 删除成功的验证信息
    */
   deleteSupplier(id) {

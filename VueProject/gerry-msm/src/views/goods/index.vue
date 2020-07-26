@@ -144,7 +144,7 @@
         <el-button
           type="primary"
           @click="
-            pojo.id === null ? addMember('pojoForm') : updateMember('pojoForm')
+            pojo.id === null ? addGoods('pojoForm') : updateGoods('pojoForm')
           "
         >
           确 定
@@ -217,15 +217,74 @@ export default {
     this.fetchData();
   },
   methods: {
+    //根据Id删除商品
+    handleDelete(id) {
+      this.$confirm("是否删除该商品?", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning"
+      })
+        .then(() => {
+          //确认
+          goodsApi.deleteGoods(id).then(response => {
+            const res = response.data;
+            this.$message({
+              type: res.flag ? "success" : "wraning",
+              message: res.message
+            });
+            if (res.flag) {
+              //删除成功，刷新列表数据
+
+              this.fetchData();
+            }
+          });
+        })
+        .catch(() => {
+          //取消
+        });
+    },
+    //根据Id编辑商品
+    handleEdit(id) {
+      this.handleAddGoods();
+      goodsApi.getGoodsById(id).then(response => {
+        const res = response.data;
+        if (res.flag) {
+          this.pojo = res.data;
+        } else {
+          this.$message({
+            message: res.message,
+            type: "warning"
+          });
+        }
+      });
+    },
+    //更新商品信息
+    updateGoods(formName) {
+      this.$refs[formName].validate(valid => {
+        if (valid) {
+          goodsApi.updateGoods(this.pojo).then(response => {
+            const res = response.data;
+            this.$message({
+              message: res.message,
+              type: res.flag ? "success" : "warning"
+            });
+            if (res.flag) {
+              //更新成功，刷新列表数据
+              this.fetchData();
+              this.dialogFormVisible = false;
+            }
+          });
+        } else {
+          return false;
+        }
+      });
+    },
     editOptionSupplier() {
       this.isEdit = true;
       this.dialogSupplierVisible = true;
     },
-    updateMember(formName) {
-      console.log(formName);
-    },
     //新增商品数据
-    addMember(formName) {
+    addGoods(formName) {
       this.$refs[formName].validate(valid => {
         if (valid) {
           //验证通过，提交添加
