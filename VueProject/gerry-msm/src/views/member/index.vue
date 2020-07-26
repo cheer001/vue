@@ -242,27 +242,34 @@ export default {
     this.fetchData();
   },
   methods: {
-    //更新会员数据
-    updateMember(formName) {
-      this.$refs[formName].validate(valid => {
-        if (valid) {
-          //提交更新
-          memberApi.updateMember(this.pojo).then(response => {
-            const res = response.data;
-            this.$message({
-              message: res.message,
-              type: res.flag ? "success" : "warning"
-            });
-            if (res.flag) {
-              //更新成功，刷新列表数据
-              this.fetchData();
-              this.dialogFormVisible = false;
-            }
-          });
-        } else {
-          return false;
-        }
-      });
+    //抓取数据
+    fetchData() {
+      //调用分页查询数据
+      memberApi
+        .getMemberList(this.currentPage, this.pageSize, this.searchMap)
+        .then(response => {
+          const res = response.data;
+          console.log(res);
+          this.list = res.data.rows;
+          this.total = res.data.total;
+        });
+    },
+    //重置行内表单
+    resetForm(formName) {
+      console.log("重置", formName);
+      this.$refs[formName].resetFields();
+    },
+    //当每页显示条数改变后，被触发，val是最新的每页显示条数
+    handleSizeChange(val) {
+      console.log("pageSize", val);
+      this.pageSize = val;
+      this.fetchData();
+    },
+    //当页码改变后，被触发，val是最新的页码
+    handleCurrentChange(val) {
+      console.log("currentPage", val);
+      this.currentPage = val;
+      this.fetchData();
     },
     //弹出新增窗口
     handleAddMember() {
@@ -300,35 +307,6 @@ export default {
         }
       });
     },
-    //重置行内表单
-    resetForm(formName) {
-      console.log("重置", formName);
-      this.$refs[formName].resetFields();
-    },
-    //当每页显示条数改变后，被触发，val是最新的每页显示条数
-    handleSizeChange(val) {
-      console.log("pageSize", val);
-      this.pageSize = val;
-      this.fetchData();
-    },
-    //当页码改变后，被触发，val是最新的页码
-    handleCurrentChange(val) {
-      console.log("currentPage", val);
-      this.currentPage = val;
-      this.fetchData();
-    },
-    //抓取数据
-    fetchData() {
-      //调用分页查询数据
-      memberApi
-        .getMemberList(this.currentPage, this.pageSize, this.searchMap)
-        .then(response => {
-          const res = response.data;
-          console.log(res);
-          this.list = res.data.rows;
-          this.total = res.data.total;
-        });
-    },
     //根据Id编辑会员
     handleEdit(id) {
       console.log("编辑", id);
@@ -337,6 +315,28 @@ export default {
         const res = response.data;
         if (res.flag) {
           this.pojo = res.data;
+        }
+      });
+    },
+    //更新会员数据
+    updateMember(formName) {
+      this.$refs[formName].validate(valid => {
+        if (valid) {
+          //提交更新
+          memberApi.updateMember(this.pojo).then(response => {
+            const res = response.data;
+            this.$message({
+              message: res.message,
+              type: res.flag ? "success" : "warning"
+            });
+            if (res.flag) {
+              //更新成功，刷新列表数据
+              this.fetchData();
+              this.dialogFormVisible = false;
+            }
+          });
+        } else {
+          return false;
         }
       });
     },

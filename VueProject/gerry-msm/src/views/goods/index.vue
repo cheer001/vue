@@ -217,31 +217,84 @@ export default {
     this.fetchData();
   },
   methods: {
-    //根据Id删除商品
-    handleDelete(id) {
-      this.$confirm("是否删除该商品?", "提示", {
-        confirmButtonText: "确定",
-        cancelButtonText: "取消",
-        type: "warning"
-      })
-        .then(() => {
-          //确认
-          goodsApi.deleteGoods(id).then(response => {
+    //抓取数据
+    fetchData() {
+      goodsApi
+        .getGoodsList(this.currentPage, this.pageSize, this.searchMap)
+        .then(response => {
+          const res = response.data;
+          if (res.flag) {
+            this.total = res.data.total;
+            this.list = res.data.rows;
+          }
+        });
+    },
+    //重置行内表单
+    resetForm(formName) {
+      this.$refs[formName].resetFields();
+    },
+    //当每页显示条数改变后，被触发，val是最新的每页显示条数
+    handleSizeChange(val) {
+      this.pageSize = val;
+      this.fetchData();
+    },
+    //当页码改变后，被触发，val是最新的页码
+    handleCurrentChange(val) {
+      this.currentPage = val;
+      this.fetchData();
+    },
+    editOptionSupplier() {
+      this.isEdit = true;
+      this.dialogSupplierVisible = true;
+    },
+    optionSupplier(currentRow) {
+      if (this.isEdit) {
+        //是编辑窗口打开的选择供应商
+        this.pojo.supplierName = currentRow.name;
+        this.pojo.supplierId = currentRow.id;
+      } else {
+        //是搜索区域打开的选择供应商
+        this.searchMap.supplierName = currentRow.name;
+        this.searchMap.supplierId = currentRow.id;
+      }
+      this.isEdit = false; //还原编辑窗口的初始状态
+      this.dialogSupplierVisible = false;
+    },
+    //新增商品数据
+    handleAddGoods() {
+      this.dialogFormVisible = true;
+      /*
+        this.$nextTick() 是一个异步事件，当Dom全部渲染结束之后，它的回调函数才会被执行
+         弹出窗口打开之后，需要加载Dom，就需要花费一点时间，我们就应该等待它加载完dom之后，
+         再进行调用resetFields，重置表单和清除样式，如果在不使用$nextTick的情况下，
+         使用表单中的方法就会报错，因为在dom渲染过程中这些方法还没有定义出来
+      */
+      this.$nextTick(() => {
+        this.$refs["pojoForm"].resetFields();
+      });
+    },
+    //新增商品数据
+    addGoods(formName) {
+      this.$refs[formName].validate(valid => {
+        if (valid) {
+          //验证通过，提交添加
+          goodsApi.addGoods(this.pojo).then(response => {
             const res = response.data;
             this.$message({
-              type: res.flag ? "success" : "wraning",
-              message: res.message
+              message: res.message,
+              type: res.flag ? "success" : "warning"
             });
             if (res.flag) {
-              //删除成功，刷新列表数据
-
+              //新增成功，刷新列表数据
               this.fetchData();
+              this.dialogFormVisible = false;
             }
           });
-        })
-        .catch(() => {
-          //取消
-        });
+        } else {
+          //验证不通过
+          return false;
+        }
+      });
     },
     //根据Id编辑商品
     handleEdit(id) {
@@ -279,83 +332,30 @@ export default {
         }
       });
     },
-    editOptionSupplier() {
-      this.isEdit = true;
-      this.dialogSupplierVisible = true;
-    },
-    //新增商品数据
-    addGoods(formName) {
-      this.$refs[formName].validate(valid => {
-        if (valid) {
-          //验证通过，提交添加
-          goodsApi.addGoods(this.pojo).then(response => {
+    //根据Id删除商品
+    handleDelete(id) {
+      this.$confirm("是否删除该商品?", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning"
+      })
+        .then(() => {
+          //确认
+          goodsApi.deleteGoods(id).then(response => {
             const res = response.data;
             this.$message({
-              message: res.message,
-              type: res.flag ? "success" : "warning"
+              type: res.flag ? "success" : "wraning",
+              message: res.message
             });
             if (res.flag) {
-              //新增成功，刷新列表数据
+              //删除成功，刷新列表数据
+
               this.fetchData();
-              this.dialogFormVisible = false;
             }
           });
-        } else {
-          //验证不通过
-          return false;
-        }
-      });
-    },
-    optionSupplier(currentRow) {
-      if (this.isEdit) {
-        //是编辑窗口打开的选择供应商
-        this.pojo.supplierName = currentRow.name;
-        this.pojo.supplierId = currentRow.id;
-      } else {
-        //是搜索区域打开的选择供应商
-        this.searchMap.supplierName = currentRow.name;
-        this.searchMap.supplierId = currentRow.id;
-      }
-      this.isEdit = false; //还原编辑窗口的初始状态
-      this.dialogSupplierVisible = false;
-    },
-    //新增商品数据
-    handleAddGoods() {
-      this.dialogFormVisible = true;
-      /*
-        this.$nextTick() 是一个异步事件，当Dom全部渲染结束之后，它的回调函数才会被执行
-         弹出窗口打开之后，需要加载Dom，就需要花费一点时间，我们就应该等待它加载完dom之后，
-         再进行调用resetFields，重置表单和清除样式，如果在不使用$nextTick的情况下，
-         使用表单中的方法就会报错，因为在dom渲染过程中这些方法还没有定义出来
-      */
-      this.$nextTick(() => {
-        this.$refs["pojoForm"].resetFields();
-      });
-    },
-    //重置行内表单
-    resetForm(formName) {
-      this.$refs[formName].resetFields();
-    },
-    //当每页显示条数改变后，被触发，val是最新的每页显示条数
-    handleSizeChange(val) {
-      this.pageSize = val;
-      this.fetchData();
-    },
-    //当页码改变后，被触发，val是最新的页码
-    handleCurrentChange(val) {
-      this.currentPage = val;
-      this.fetchData();
-    },
-    //抓取数据
-    fetchData() {
-      goodsApi
-        .getGoodsList(this.currentPage, this.pageSize, this.searchMap)
-        .then(response => {
-          const res = response.data;
-          if (res.flag) {
-            this.total = res.data.total;
-            this.list = res.data.rows;
-          }
+        })
+        .catch(() => {
+          //取消
         });
     }
   }

@@ -213,31 +213,49 @@ export default {
     this.fetchData();
   },
   methods: {
+    //抓取数据
+    fetchData() {
+      supplierApi
+        .getSupplierList(this.currentPage, this.pageSize, this.searchMap)
+        .then(response => {
+          const res = response.data;
+          if (res.flag) {
+            this.total = res.data.total;
+            this.list = res.data.rows;
+          }
+        });
+    },
     //当点击某一行时，调用这个函数进行处理
     handleCurrentRowChange(currentRow) {
       //点击后，将点击的数据传递到父组件（商品管理中），
       //则可以通过触发父组件中的option-supplier  触发之后，父组件可以在option-supplier 这个事件对应的处理函数中进行接受数据currentRow
       this.$emit("option-supplier", currentRow);
     },
-    //更新供应商
-    updateSupplier(formName) {
-      this.$refs[formName].validate(valid => {
-        if (valid) {
-          supplierApi.updateSupplier(this.pojo).then(response => {
-            const res = response.data;
-            this.$message({
-              message: res.message,
-              type: res.flag ? "success" : "warning"
-            });
-            if (res.flag) {
-              //更新成功，刷新列表数据
-              this.fetchData();
-              this.dialogFormVisible = false;
-            }
-          });
-        } else {
-          return false;
-        }
+    //重置行内表单
+    resetForm(formName) {
+      this.$refs[formName].resetFields();
+    },
+    //当每页显示条数改变后，被触发，val是最新的每页显示条数
+    handleSizeChange(val) {
+      this.pageSize = val;
+      this.fetchData();
+    },
+    //当页码改变后，被触发，val是最新的页码
+    handleCurrentChange(val) {
+      this.currentPage = val;
+      this.fetchData();
+    },
+    //弹出新增窗口
+    handleAddMember() {
+      this.dialogFormVisible = true;
+      /*
+        this.$nextTick() 是一个异步事件，当Dom全部渲染结束之后，它的回调函数才会被执行
+         弹出窗口打开之后，需要加载Dom，就需要花费一点时间，我们就应该等待它加载完dom之后，
+         再进行调用resetFields，重置表单和清除样式，如果在不使用$nextTick的情况下，
+         使用表单中的方法就会报错，因为在dom渲染过程中这些方法还没有定义出来
+      */
+      this.$nextTick(() => {
+        this.$refs["pojoForm"].resetFields();
       });
     },
     //添加供应商
@@ -262,45 +280,6 @@ export default {
         }
       });
     },
-    //弹出新增窗口
-    handleAddMember() {
-      this.dialogFormVisible = true;
-      /*
-        this.$nextTick() 是一个异步事件，当Dom全部渲染结束之后，它的回调函数才会被执行
-         弹出窗口打开之后，需要加载Dom，就需要花费一点时间，我们就应该等待它加载完dom之后，
-         再进行调用resetFields，重置表单和清除样式，如果在不使用$nextTick的情况下，
-         使用表单中的方法就会报错，因为在dom渲染过程中这些方法还没有定义出来
-      */
-      this.$nextTick(() => {
-        this.$refs["pojoForm"].resetFields();
-      });
-    },
-    //重置行内表单
-    resetForm(formName) {
-      this.$refs[formName].resetFields();
-    },
-    //当每页显示条数改变后，被触发，val是最新的每页显示条数
-    handleSizeChange(val) {
-      this.pageSize = val;
-      this.fetchData();
-    },
-    //当页码改变后，被触发，val是最新的页码
-    handleCurrentChange(val) {
-      this.currentPage = val;
-      this.fetchData();
-    },
-    //抓取数据
-    fetchData() {
-      supplierApi
-        .getSupplierList(this.currentPage, this.pageSize, this.searchMap)
-        .then(response => {
-          const res = response.data;
-          if (res.flag) {
-            this.total = res.data.total;
-            this.list = res.data.rows;
-          }
-        });
-    },
     //根据Id编辑供应商
     handleEdit(id) {
       //清除原来的表单数据和校验
@@ -314,6 +293,27 @@ export default {
             message: res.message,
             type: "warning"
           });
+        }
+      });
+    },
+    //更新供应商
+    updateSupplier(formName) {
+      this.$refs[formName].validate(valid => {
+        if (valid) {
+          supplierApi.updateSupplier(this.pojo).then(response => {
+            const res = response.data;
+            this.$message({
+              message: res.message,
+              type: res.flag ? "success" : "warning"
+            });
+            if (res.flag) {
+              //更新成功，刷新列表数据
+              this.fetchData();
+              this.dialogFormVisible = false;
+            }
+          });
+        } else {
+          return false;
         }
       });
     },
