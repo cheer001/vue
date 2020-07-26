@@ -176,7 +176,7 @@ export default {
   },
   data() {
     return {
-      list: [],
+      list: [], //商品列表
       pageSize: 10,
       currentPage: 1,
       total: 0,
@@ -185,9 +185,9 @@ export default {
         code: "",
         supplierId: "",
         supplierName: ""
-      },
+      }, //搜索条件
       dialogSupplierVisible: false, //控制供应商对话框
-      isDialog: true,
+      isDialog: true, //控制选择供应商中的一部分Dom不渲染
       dialogFormVisible: false, //编辑窗口
       pojo: {
         id: null,
@@ -198,7 +198,7 @@ export default {
         purchasePrice: 0,
         storageNum: 0,
         supplierName: ""
-      },
+      }, //商品实体
       rules: {
         name: [
           { required: true, message: "商品名称不能为空", trigger: "blur" }
@@ -209,10 +209,11 @@ export default {
         retailPrice: [
           { required: true, message: "零售价不能为空", trigger: "blur" }
         ]
-      },
+      }, //表单效验规则
       isEdit: false //是否为变价编辑窗口
     };
   },
+  //获取到data中的数据后，模板渲染前 ，进行抓取数据
   created() {
     this.fetchData();
   },
@@ -243,10 +244,12 @@ export default {
       this.currentPage = val;
       this.fetchData();
     },
+    //添加商品时 控制选择供应商窗口
     editOptionSupplier() {
       this.isEdit = true;
       this.dialogSupplierVisible = true;
     },
+    //选择供应商后进行供应商名称回显
     optionSupplier(currentRow) {
       if (this.isEdit) {
         //是编辑窗口打开的选择供应商

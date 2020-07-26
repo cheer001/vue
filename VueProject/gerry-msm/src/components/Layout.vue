@@ -16,9 +16,9 @@ export default {
     return {};
   },
   components: {
-    AppHeader,
-    AppNavbar,
-    AppMain
+    AppHeader, //头部
+    AppNavbar, //导航栏
+    AppMain //主区域
   }
 };
 </script>
@@ -33,6 +33,7 @@ export default {
   right: 0px;
   background-color: #2d3a4b;
 }
+/* 导航栏区域 */
 .navbar {
   position: absolute;
   width: 230px;
@@ -42,6 +43,7 @@ export default {
   overflow-y: auto;
   background-color: #545c64;
 }
+/* 主区域 */
 .main {
   position: absolute;
   top: 50px;

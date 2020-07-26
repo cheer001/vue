@@ -29,16 +29,17 @@ export default {
       form: {
         username: "",
         password: ""
-      },
+      }, //表单数据
       rules: {
         username: [
           { required: true, message: "账号不能为空", trigger: "blur" }
         ],
         password: [{ required: true, message: "密码不能为空", trigger: "blur" }]
-      }
+      } //表单数据验证
     };
   },
   methods: {
+    //提交表单信息 进行用户登录
     submitForm(formName) {
       this.$refs[formName].validate(valid => {
         console.log(valid); //

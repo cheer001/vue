@@ -202,7 +202,7 @@ const payTypeOptions = [
 export default {
   data() {
     return {
-      list: [],
+      list: [], //会员列表
       total: 0, //总记录数
       currentPage: 1, //页码
       pageSize: 10, //每页显示10条数据
@@ -223,7 +223,7 @@ export default {
         integral: 0,
         payType: "",
         address: ""
-      }, //提交的数据
+      }, //会员实体
       dialogFormVisible: false, //控制新增对话框
       rules: {
         cardNum: [
@@ -235,9 +235,10 @@ export default {
         payType: [
           { required: true, message: "请选择支付类型", trigger: "blur" }
         ]
-      }
+      } //表单数据校验
     };
   },
+  //获取到data中的数据后，模板渲染前 ，进行抓取数据
   created() {
     this.fetchData();
   },

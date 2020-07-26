@@ -184,7 +184,7 @@ export default {
   },
   data() {
     return {
-      list: [],
+      list: [], //供应商列表
       pageSize: 10,
       currentPage: 1,
       total: 0,
@@ -206,9 +206,10 @@ export default {
         linkman: [
           { required: true, message: "联系人不能为空", trigger: "blur" }
         ]
-      }
+      } //表单数据校验
     };
   },
+  //获取到data中的数据后，模板渲染前 ，进行抓取数据
   created() {
     this.fetchData();
   },

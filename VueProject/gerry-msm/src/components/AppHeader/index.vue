@@ -28,8 +28,8 @@ export default {
   },
   components: {},
   methods: {
+    //处理首页右上角 下拉菜单
     handleCommand(command) {
-      console.log(`点击了${command}`);
       const token = localStorage.getItem("gerry-msm-token");
       switch (command) {
         case "editPWD":
