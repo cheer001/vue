@@ -1,5 +1,5 @@
 import axios from "axios";
-import { Loading } from "element-ui";
+import { Loading, Message } from "element-ui";
 
 const loading = {
   loadindInstance: null, //loading实例
@@ -30,7 +30,7 @@ const loading = {
 // });
 
 const request = axios.create({
-  //   baseURL: "/dev-api", //
+  // baseURL: "/dev-api2", //
   // baseURL: "/", //
   // /db.json  > 通过 axios> /dev-api/db.json >  通过代理转发(vue.config.js)  >> http://localhost:8001/db.json
   // baseURL: "/dev-api", //
@@ -63,37 +63,27 @@ request.interceptors.response.use(
   response => {
     //关闭加载窗口
     loading.close();
+
+    const res = response.data;
+    if (res.code !== 2000) {
+      Message({
+        message: res.message,
+        type: "warning",
+        duration: 5 * 1000
+      });
+    }
     return response;
   },
   error => {
     loading.close();
+    console.log("response", error.response.status);
+    Message({
+      message: error.message,
+      type: "error",
+      duration: 5 * 1000
+    });
     return Promise.reject(error);
   }
 );
-// Add a request interceptor
-// axios.interceptors.request.use(
-//   function(config) {
-//     // Do something before request is sent
-//     return config;
-//   },
-//   function(error) {
-//     // Do something with request error
-//     return Promise.reject(error);
-//   }
-// );
-
-// // Add a response interceptor
-// axios.interceptors.response.use(
-//   function(response) {
-//     // Any status code that lie within the range of 2xx cause this function to trigger
-//     // Do something with response data
-//     return response;
-//   },
-//   function(error) {
-//     // Any status codes that falls outside the range of 2xx cause this function to trigger
-//     // Do something with response error
-//     return Promise.reject(error);
-//   }
-// );
 
 export default request; //导出自定义创建的 axios 对象
