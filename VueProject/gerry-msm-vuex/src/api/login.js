@@ -9,6 +9,7 @@ import request from "@/utils/request";
  * @returns 用户token信息
  */
 export function login(username, password) {
+  //返回一个Promise对象,该Promise对象时axios实现的
   return request({
     url: "/user/login",
     method: "post",

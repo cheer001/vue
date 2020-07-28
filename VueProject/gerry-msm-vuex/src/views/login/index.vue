@@ -28,67 +28,47 @@ export default {
     return {
       form: {
         username: "",
-        password: ""
+        password: "",
       }, //表单数据
       rules: {
         username: [
-          { required: true, message: "账号不能为空", trigger: "blur" }
+          { required: true, message: "账号不能为空", trigger: "blur" },
         ],
-        password: [{ required: true, message: "密码不能为空", trigger: "blur" }]
-      } //表单数据验证
+        password: [
+          { required: true, message: "密码不能为空", trigger: "blur" },
+        ],
+      }, //表单数据验证
     };
   },
   methods: {
     //提交表单信息 进行用户登录
     submitForm(formName) {
-      this.$refs[formName].validate(valid => {
+      this.$refs[formName].validate((valid) => {
         console.log(valid); //
         //提交表单给后台进行验证是否正确
         if (valid) {
-          //   console.log(valid);
-          login(this.form.username, this.form.password).then(respose => {
-            console.log(respose.data);
-            const res = respose.data;
-            if (res.flag) {
-              //验证成功,通过token去获取用户信息
-              getUserInfo(res.data.token).then(response => {
-                const resUser = response.data;
-                if (resUser.flag) {
-                  //获取到了用户的数据
-                  console.log("userInfo", resUser.data);
-                  //1.保存token ,用户信息
-                  localStorage.setItem(
-                    "gerry-msm-user",
-                    JSON.stringify(resUser.data)
-                  );
-                  localStorage.setItem("gerry-msm-token", res.data.token);
-                  //前往首页
-                  this.$router.push("/");
-                } else {
-                  this.$message({
-                    message: resUser.message,
-                    type: "warning"
-                  });
-                }
-              });
-            } else {
-              // 未通过登录,弹出警告
-              //   alert(res.message);
-              // $message是ElementUI 中的方法,像 $router 一样
-              this.$message({
-                message: res.message,
-                type: "warning"
-              });
-            }
-          });
+          this.$store
+            .dispatch("Login", this.form)
+            .then((response) => {
+              //response 是 后台响应回来的数据对象
+              if (response.flag) {
+                this.$router.push("/");
+              } else {
+                this.$message({
+                  message: response.message,
+                  type: "warning",
+                });
+              }
+            })
+            .catch((error) => {});
         } else {
           //
           console.log("验证失败");
           return false;
         }
       });
-    }
-  }
+    },
+  },
 };
 </script>
 
