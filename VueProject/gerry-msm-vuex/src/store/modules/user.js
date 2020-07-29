@@ -10,7 +10,7 @@ import { login, getUserInfo, logout } from "../../api/login";
 const user = {
   state: {
     token: getToken(), //getToken() 作为token的初始值，解决刷新之后token为空的问题
-    user: getUserInfo(),
+    user: getUser(),
   },
   mutations: {
     SET_TOKEN(state, token) {
@@ -18,6 +18,7 @@ const user = {
       setToken(token);
     },
     SET_USER(state, user) {
+      console.log("user--SET_USER", user);
       state.user = user;
       setUser(user);
     },
@@ -34,7 +35,7 @@ const user = {
       // resolve 触发成功处理
       return new Promise((resolve, reject) => {
         //login 函数返回的也是Promise对象
-        login(form.user, form.password)
+        login(form.username.trim(), form.password)
           .then((response) => {
             const res = response.data; //拿到响应的数据
             if (res.flag) {

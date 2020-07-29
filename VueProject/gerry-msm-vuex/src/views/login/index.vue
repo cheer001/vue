@@ -44,7 +44,6 @@ export default {
     //提交表单信息 进行用户登录
     submitForm(formName) {
       this.$refs[formName].validate((valid) => {
-        console.log(valid); //
         //提交表单给后台进行验证是否正确
         if (valid) {
           this.$store

@@ -36,6 +36,7 @@ export function getUser() {
  * @param {*} user 用户信息对象
  */
 export function setUser(user) {
+  console.log("auth--setUser",user);
   localStorage.setItem(USER_KEY, JSON.stringify(user));
 }
 /**
@@ -43,7 +44,7 @@ export function setUser(user) {
  *
  * @export
  */
-export function removeToken(){
-    localStorage.removeItem(TOKEN_KEY);
-    localStorage.removeItem(USER_KEY);
+export function removeToken() {
+  localStorage.removeItem(TOKEN_KEY);
+  localStorage.removeItem(USER_KEY);
 }
