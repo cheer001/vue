@@ -6,7 +6,8 @@
     </a>
     <el-dropdown @command="handleCommand">
       <span class="el-dropdown-link">
-        {{ user.name }}<i class="el-icon-arrow-down el-icon--right"></i>
+        {{ user.name }}
+        <i class="el-icon-arrow-down el-icon--right"></i>
       </span>
       <el-dropdown-menu slot="dropdown">
         <el-dropdown-item icon="el-icon-edit" command="editPWD"

@@ -11,7 +11,7 @@ const loading = {
       this.loadindInstance = Loading.service({
         target: ".main",
         text: "拼了老命加载钟...",
-        background: "rgba(0, 0, 0, 0.5)"
+        background: "rgba(0, 0, 0, 0.5)",
       });
     }
   },
@@ -22,7 +22,7 @@ const loading = {
     }
     //关闭加载后实例至为空
     this.loadindInstance = null;
-  }
+  },
 };
 // axios.get("/db.json").then(response => {
 //   const data = response.data;
@@ -35,7 +35,7 @@ const request = axios.create({
   // /db.json  > 通过 axios> /dev-api/db.json >  通过代理转发(vue.config.js)  >> http://localhost:8001/db.json
   // baseURL: "/dev-api", //
   baseURL: process.env.VUE_APP_BASE_API, //请求路径的基础URL(也就是前缀)
-  timeout: 5000 //请求超时.5000毫秒
+  timeout: 5000, //请求超时.5000毫秒
 });
 
 // request.get("/db.json").then(response => {
@@ -45,14 +45,14 @@ const request = axios.create({
 
 //请求拦截器
 request.interceptors.request.use(
-  config => {
+  (config) => {
     //请求的拦截
 
     //打开加载窗口
     loading.open();
     return config;
   },
-  error => {
+  (error) => {
     loading.close();
     //出现异常的时候
     return Promise.reject(error);
@@ -60,7 +60,7 @@ request.interceptors.request.use(
 );
 //响应拦截器
 request.interceptors.response.use(
-  response => {
+  (response) => {
     //关闭加载窗口
     loading.close();
 
@@ -69,18 +69,17 @@ request.interceptors.response.use(
       Message({
         message: res.message,
         type: "warning",
-        duration: 5 * 1000
+        duration: 5 * 1000,
       });
     }
     return response;
   },
-  error => {
+  (error) => {
     loading.close();
-    console.log("response", error.response.status);
     Message({
       message: error.message,
       type: "error",
-      duration: 5 * 1000
+      duration: 5 * 1000,
     });
     return Promise.reject(error);
   }

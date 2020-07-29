@@ -37,7 +37,8 @@ router.beforeEach((to, from, next) => {
     }
     //想走login之外的页面
     else {
-      const userInfo = localStorage.getItem("gerry-msm-user");
+      // const userInfo = localStorage.getItem("gerry-msm-user");
+      const userInfo = store.state.user.user;
       //有用户信息
       if (userInfo) {
         //则直接到目标路由,
@@ -46,18 +47,16 @@ router.beforeEach((to, from, next) => {
       //如果本地没有用户信息
       else {
         //就通过token去获取用户信息
-        getUserInfo(token).then((response) => {
-          const res = response.data;
-          if (res.flag) {
-            //如果获取到用户信息,则进行非登录页面,否则回到登录页面
-            //保存到本地
-            localStorage.setItem("gerry-msm-user", JSON.stringify(res.data));
-            next();
-          } else {
-            //未获取到用户信息,重新登录
-            next({ path: "/login" });
-          }
-        });
+        store
+          .dispatch("GetUserInfo", token)
+          .then((response) => {
+            if (response.flag) {
+              next();
+            } else {
+              next({ path: "/login" });
+            }
+          })
+          .catch((error) => {});
       }
     }
   }
