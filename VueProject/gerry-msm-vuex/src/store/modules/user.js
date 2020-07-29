@@ -9,7 +9,7 @@ import { login, getUserInfo, logout } from "../../api/login";
 
 const user = {
   state: {
-    token: null,
+    token: getToken(),//getToken() 作为token的初始值，解决刷新之后token为空的问题
     user: null,
   },
   mutations: {

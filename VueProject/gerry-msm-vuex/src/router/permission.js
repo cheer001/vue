@@ -10,34 +10,43 @@
 
 import router from "../router";
 import { getUserInfo } from "../api/login";
+import store from "../store";
 
 router.beforeEach((to, from, next) => {
   //1.获取token
-  const token = localStorage.getItem("gerry-msm-token");
+  // const token = localStorage.getItem("gerry-msm-token");
+  const token = store.state.user.token;
   console.log("token", token);
+  //没有token
   if (!token) {
-    //1.1 如果没有获取到
-    //要访问非登录页面,则不让访问,加到登录页面 /login
+    //想走login之外的页面则强制去login页
     if (to.path !== "/login") {
       next({ path: "/login" });
-    } else {
+    }
+    //想走login页则放行
+    else {
       //请求登录页面
       next();
     }
-  } else {
-    //1.2 获取到token
-    //1.2.1 请求路由 /login ,就去目标路由
+  }
+  //有token
+  else {
+    //想走login页,放行
     if (to.path === "/login") {
       next();
-    } else {
-      //1.2.2 请求路由非登录页面,现在本地查看是否有用户信息
+    }
+    //想走login之外的页面
+    else {
       const userInfo = localStorage.getItem("gerry-msm-user");
+      //有用户信息
       if (userInfo) {
-        //本地获取到,则直接到目标路由,
+        //则直接到目标路由,
         next();
-      } else {
-        //如果本地没有用户信息,就通过token去获取用户信息
-        getUserInfo(token).then(response => {
+      }
+      //如果本地没有用户信息
+      else {
+        //就通过token去获取用户信息
+        getUserInfo(token).then((response) => {
           const res = response.data;
           if (res.flag) {
             //如果获取到用户信息,则进行非登录页面,否则回到登录页面
