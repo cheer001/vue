@@ -3,25 +3,25 @@ import {
   setToken,
   setUser,
   getUser,
-  removeToken,
+  removeToken
 } from "@/utils/auth";
 import { login, getUserInfo, logout } from "../../api/login";
 
 const user = {
   state: {
     token: getToken(), //getToken() 作为token的初始值，解决刷新之后token为空的问题
-    user: getUser(),
+    user: getUser()
   },
   mutations: {
     SET_TOKEN(state, token) {
       state.token = token;
       setToken(token);
-    },
-    SET_USER(state, user) {
-      console.log("user--SET_USER", user);
-      state.user = user;
       setUser(user);
     },
+    SET_USER(state, user) {
+      state.user = user;
+      setUser(user);
+    }
   },
   actions: {
     /**
@@ -36,7 +36,7 @@ const user = {
       return new Promise((resolve, reject) => {
         //login 函数返回的也是Promise对象
         login(form.username.trim(), form.password)
-          .then((response) => {
+          .then(response => {
             const res = response.data; //拿到响应的数据
             if (res.flag) {
               commit("SET_TOKEN", res.data.token);
@@ -44,7 +44,7 @@ const user = {
               resolve(res);
             }
           })
-          .catch((error) => {
+          .catch(error => {
             reject(error);
           });
       });
@@ -58,13 +58,13 @@ const user = {
     GetUserInfo({ commit, state }) {
       return new Promise((resolve, reject) => {
         getUserInfo(state.token)
-          .then((response) => {
+          .then(response => {
             const resUser = response.data;
             commit("SET_USER", resUser.data);
             //将后台响应的用户信息传递到使用这个Promise,在任何地方使用这个Promise都可以在响应中拿到传递的数据
             resolve(resUser);
           })
-          .catch((error) => {
+          .catch(error => {
             //使用这个Promise，如果出现异常就不用处理(空着)，这里已经把错误抛出去了
             reject(error);
           });
@@ -79,19 +79,19 @@ const user = {
     Logout({ state }) {
       return new Promise((resolve, reject) => {
         logout(state.token)
-          .then((response) => {
+          .then(response => {
             const res = response.data;
             if (res.flag) {
               removeToken();
             }
             resolve(res);
           })
-          .catch((error) => {
+          .catch(error => {
             reject(error);
           });
       });
-    },
-  },
+    }
+  }
 };
 
 export default user;
