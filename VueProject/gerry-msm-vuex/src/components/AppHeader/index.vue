@@ -56,7 +56,7 @@ export default {
   data() {
     //在return上面声明自定义校验
     const validateOldPass = (rule, value, callback) => {
-      passwordApi.checkPassword(this.user.id, value).then(response => {
+      passwordApi.checkPassword(this.user.id, value).then((response) => {
         const res = response.data;
         if (res.flag) {
           //验证通过
@@ -82,17 +82,17 @@ export default {
       rules: {
         oldPass: [
           { required: true, message: "原密码不能为空", trigger: "blur" },
-          { validator: validateOldPass, trigger: "blur" }
+          { validator: validateOldPass, trigger: "blur" },
         ],
         pass: [
-          { required: true, message: "新密码密码不能为空", trigger: "blur" }
+          { required: true, message: "新密码密码不能为空", trigger: "blur" },
         ],
         checkPass: [
           { required: true, message: "确认密码不能为空", trigger: "blur" },
-          { validator: validatePass, trigger: "change" }
-        ]
+          { validator: validatePass, trigger: "change" },
+        ],
       },
-      user: this.$store.state.user.user
+      user: this.$store.state.user.user,
     };
   },
   components: {},
@@ -117,15 +117,15 @@ export default {
       });
     },
     submitForm(formName) {
-      this.$refs[formName].validate(valid => {
+      this.$refs[formName].validate((valid) => {
         if (valid) {
           passwordApi
             .changePassword(this.user.id, this.ruleForm.checkPass)
-            .then(response => {
+            .then((response) => {
               const res = response.data;
               this.$message({
                 message: res.message,
-                type: res.flag ? "success" : "warning"
+                type: res.flag ? "success" : "warning",
               });
               if (res.flag) {
                 //修改密码成功 关闭弹出框  回到登录页面
@@ -140,28 +140,26 @@ export default {
     },
     //退出系统
     handleLogout() {
-      logout(this.token).then(response => {
-        const res = response.data;
-        if (res.flag) {
-          //退出成功
-          //清除本地数据
-          localStorage.removeItem("gerry-msm-token");
-          localStorage.removeItem("gerry-msm-user");
-          //回到登录页面
-          this.$router.push("/login");
-        } else {
-          this.$message({
-            message: res.message,
-            type: "warning",
-            duration: 1000 //弹出停留时间
-          });
-        }
-      });
+      this.$store
+        .dispatch("Logout")
+        .then((response) => {
+          if (response.flag) {
+            //回到登录页面
+            this.$router.push("/login");
+          } else {
+            this.$message({
+              message: response.message,
+              type: "warning",
+              duration: 1000, //弹出停留时间
+            });
+          }
+        })
+        .catch((error) => {});
     },
     resetForm(formName) {
       this.$refs[formName].resetFields();
-    }
-  }
+    },
+  },
 };
 </script>
 

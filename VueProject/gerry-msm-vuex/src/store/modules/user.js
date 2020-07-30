@@ -70,6 +70,27 @@ const user = {
           });
       });
     },
+    /**
+     *退出登录
+     *
+     * @param {*} { state } 上下文中的状态对象
+     * @returns Promise对象
+     */
+    Logout({ state }) {
+      return new Promise((resolve, reject) => {
+        logout(state.token)
+          .then((response) => {
+            const res = response.data;
+            if (res.flag) {
+              removeToken();
+            }
+            resolve(res);
+          })
+          .catch((error) => {
+            reject(error);
+          });
+      });
+    },
   },
 };
 
