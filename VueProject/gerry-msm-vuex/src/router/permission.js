@@ -39,8 +39,6 @@ router.beforeEach((to, from, next) => {
     else {
       // const userInfo = localStorage.getItem("gerry-msm-user");
       const userInfo = store.state.user.user;
-      console.log("permission--userInfo", userInfo);
-      //有用户信息
       if (userInfo) {
         //则直接到目标路由,
         next();

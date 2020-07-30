@@ -92,7 +92,7 @@ export default {
           { validator: validatePass, trigger: "change" }
         ]
       },
-      user: JSON.parse(localStorage.getItem("gerry-msm-user"))
+      user: this.$store.state.user.user
     };
   },
   components: {},
